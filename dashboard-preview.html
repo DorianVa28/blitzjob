@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Blitzjob — Unternehmens-Dashboard (Vorschau)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;800;900&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#F5F7F0; --surface:#FFFFFF; --ink:#14261C; --ink-soft:#4B5B50;
+    --forest:#2D6A4F; --forest-dark:#1F4A37; --coral:#FF5A36; --coral-dark:#E24421;
+    --amber:#FFD23F; --line:#DEE6D6; --radius:18px;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{background:var(--bg); color:var(--ink); font-family:'Inter',sans-serif; line-height:1.5;}
+  h1,h2,h3{font-family:'Unbounded',sans-serif;}
+  .mono{font-family:'IBM Plex Mono',monospace;}
+  a{color:inherit;}
+  button{cursor:pointer; font-family:'Inter',sans-serif;}
+
+  header{position:sticky; top:0; z-index:50; background:rgba(245,247,240,.9); backdrop-filter:blur(10px); border-bottom:1px solid var(--line);}
+  .headbar{max-width:1000px; margin:0 auto; padding:14px 24px; display:flex; align-items:center; justify-content:space-between; gap:14px; flex-wrap:wrap;}
+  .logo{display:flex; align-items:center; gap:8px; font-family:'Unbounded',sans-serif; font-weight:800; font-size:17px;}
+  .logo .bolt{width:24px; height:24px; border-radius:7px; background:var(--coral); display:flex; align-items:center; justify-content:center; color:#fff; font-size:13px;}
+  .back{font-size:13px; font-weight:600; color:var(--ink-soft); display:flex; align-items:center; gap:6px;}
+  .back:hover{color:var(--forest);}
+
+  .wrap{max-width:1000px; margin:0 auto; padding:36px 24px 90px;}
+
+  .fiction-banner{
+    background:#FFF3D6; border:1px solid #F0DDA0; color:#8A6100; font-size:13px; font-weight:600;
+    padding:12px 16px; border-radius:12px; margin-bottom:32px; display:flex; align-items:center; gap:8px;
+  }
+
+  .dhead{display:flex; justify-content:space-between; align-items:flex-end; margin-bottom:28px; flex-wrap:wrap; gap:14px;}
+  .dhead h1{font-size:clamp(22px,3.2vw,30px); font-weight:800;}
+  .dhead .co-line{display:flex; align-items:center; gap:10px; margin-top:8px; font-size:13.5px; color:var(--ink-soft);}
+  .verified-badge{
+    font-family:'IBM Plex Mono',monospace; font-size:11px; font-weight:600; background:#E7F0E4; color:var(--forest-dark);
+    padding:4px 10px; border-radius:999px;
+  }
+  .btn{
+    font-family:'Unbounded',sans-serif; font-weight:600; font-size:13.5px; padding:12px 20px; border-radius:999px; border:none;
+    display:inline-flex; align-items:center; gap:8px;
+  }
+  .btn-primary{background:var(--coral); color:#fff;}
+  .btn-primary:hover{background:var(--coral-dark);}
+
+  .kpirow{display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin-bottom:32px;}
+  @media(max-width:640px){.kpirow{grid-template-columns:1fr;}}
+  .kpi{background:var(--surface); border:1.5px solid var(--line); border-radius:14px; padding:18px;}
+  .kpi .num{font-family:'IBM Plex Mono',monospace; font-size:26px; font-weight:600; color:var(--forest-dark);}
+  .kpi .lbl{font-size:12.5px; color:var(--ink-soft); margin-top:4px;}
+
+  .section-title{font-size:15px; font-weight:700; margin-bottom:14px; display:flex; align-items:center; justify-content:space-between;}
+  .section-title .sub{font-size:12.5px; color:var(--ink-soft); font-weight:500;}
+
+  .jobrow{
+    background:var(--surface); border:1.5px solid var(--line); border-radius:14px; padding:16px 18px;
+    display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; flex-wrap:wrap; gap:10px;
+  }
+  .jobrow .jt{font-weight:700; font-size:14.5px;}
+  .jobrow .jm{font-size:12.5px; color:var(--ink-soft); margin-top:2px;}
+  .jobrow .jstat{font-family:'IBM Plex Mono',monospace; font-size:11px; background:#E7F0E4; color:var(--forest-dark); padding:4px 10px; border-radius:999px;}
+
+  .appcard{
+    background:var(--surface); border:1.5px solid var(--line); border-radius:var(--radius); padding:18px; margin-bottom:14px;
+  }
+  .appcard-top{display:flex; justify-content:space-between; gap:12px; align-items:flex-start; flex-wrap:wrap;}
+  .appcard-name{display:flex; align-items:center; gap:12px;}
+  .avatar{width:40px; height:40px; border-radius:50%; background:var(--forest); color:#fff; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:14px; flex-shrink:0;}
+  .appcard-name h4{font-size:15px; font-weight:700; display:flex; align-items:center; gap:8px;}
+  .appcard-name .sub{font-size:12.5px; color:var(--ink-soft); margin-top:2px;}
+  .mini-badge{font-family:'IBM Plex Mono',monospace; font-size:10.5px; background:#E7F0E4; color:var(--forest-dark); padding:3px 8px; border-radius:999px;}
+  .chiprow{display:flex; flex-wrap:wrap; gap:6px; margin-top:12px;}
+  .chiprow span{font-family:'IBM Plex Mono',monospace; font-size:11px; background:#F0F3EC; color:var(--forest-dark); padding:4px 9px; border-radius:999px;}
+  .appcard-actions{display:flex; gap:8px; margin-top:14px;}
+  .btn-outline-danger{background:transparent; border:1.5px solid #F1C4C4; color:#D64545; font-weight:700; font-size:12.5px; padding:9px 15px; border-radius:999px;}
+  .btn-accept{background:var(--forest); color:#fff; font-weight:700; font-size:12.5px; padding:9px 15px; border-radius:999px; border:none;}
+  .status-pill{font-family:'IBM Plex Mono',monospace; font-size:11px; font-weight:600; padding:5px 11px; border-radius:999px;}
+  .status-accepted{background:#E7F0E4; color:var(--forest-dark);}
+  .status-declined{background:#FBE4E4; color:#D64545;}
+
+  .empty-note{font-size:13px; color:var(--ink-soft); text-align:center; padding:20px; background:var(--surface); border:1.5px dashed var(--line); border-radius:14px;}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="headbar">
+    <div class="logo"><span class="bolt">⚡</span>Blitzjob</div>
+    <a class="back" href="index.html">← Zurück zur Startseite</a>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <div class="fiction-banner">🧪 Fiktive Vorschau — dieses Dashboard existiert noch nicht wirklich, es zeigt nur, wie es später aussehen könnte.</div>
+
+  <div class="dhead">
+    <div>
+      <h1>Café Belvedere</h1>
+      <div class="co-line"><span class="verified-badge">✓ Verifiziert</span><span>Eupen · Gastronomie</span></div>
+    </div>
+    <button class="btn btn-primary">+ Neue Anzeige</button>
+  </div>
+
+  <div class="kpirow">
+    <div class="kpi"><div class="num">2</div><div class="lbl">Aktive Anzeigen</div></div>
+    <div class="kpi"><div class="num">3</div><div class="lbl">Neue Bewerbungen</div></div>
+    <div class="kpi"><div class="num">1</div><div class="lbl">Zu Gesprächen eingeladen</div></div>
+  </div>
+
+  <div class="section-title">Eure Anzeigen <span class="sub">2 aktiv</span></div>
+  <div class="jobrow">
+    <div><div class="jt">Aushilfe Service</div><div class="jm">8–12 Std/Woche · 12,50 €/Std</div></div>
+    <span class="jstat">● Online</span>
+  </div>
+  <div class="jobrow">
+    <div><div class="jt">Wochenend-Aushilfe Küche</div><div class="jm">Nur Sa & So · 13,00 €/Std</div></div>
+    <span class="jstat">● Online</span>
+  </div>
+
+  <div class="section-title" style="margin-top:32px;">Bewerbungen <span class="sub">alle Anzeigen</span></div>
+
+  <div class="appcard">
+    <div class="appcard-top">
+      <div class="appcard-name">
+        <div class="avatar">LB</div>
+        <div>
+          <h4>Lena B. <span class="mini-badge">✓ verifiziert</span></h4>
+          <div class="sub">Bewirbt sich auf: Aushilfe Service</div>
+        </div>
+      </div>
+    </div>
+    <div class="chiprow"><span>Eupen</span><span>5–10 Std/Woche</span><span>Nachmittags verfügbar</span></div>
+    <div class="appcard-actions">
+      <button class="btn-outline-danger">Absagen</button>
+      <button class="btn-accept">Annehmen</button>
+    </div>
+  </div>
+
+  <div class="appcard">
+    <div class="appcard-top">
+      <div class="appcard-name">
+        <div class="avatar">JP</div>
+        <div>
+          <h4>Jonas P.</h4>
+          <div class="sub">Bewirbt sich auf: Wochenend-Aushilfe Küche</div>
+        </div>
+      </div>
+      <span class="status-pill status-accepted">✓ Angenommen</span>
+    </div>
+    <div class="chiprow"><span>Kelmis</span><span>10–20 Std/Woche</span><span>Nur Wochenende</span></div>
+    <div class="appcard-actions">
+      <button class="btn-accept" style="background:var(--ink);">📅 Zum Gespräch einladen</button>
+    </div>
+  </div>
+
+  <div class="appcard">
+    <div class="appcard-top">
+      <div class="appcard-name">
+        <div class="avatar">MD</div>
+        <div>
+          <h4>Marie D. <span class="mini-badge">✓ verifiziert</span></h4>
+          <div class="sub">Bewirbt sich auf: Aushilfe Service</div>
+        </div>
+      </div>
+      <span class="status-pill status-declined">Abgesagt</span>
+    </div>
+    <div class="chiprow"><span>Raeren</span><span>5–10 Std/Woche</span><span>Vormittags verfügbar</span></div>
+  </div>
+
+</div>
+
+<script>
+document.querySelectorAll(".btn-accept, .btn-outline-danger").forEach(btn=>{
+  btn.addEventListener("click", ()=>{
+    if(btn.textContent.includes("Gespräch")) return;
+    const card = btn.closest(".appcard");
+    const actions = card.querySelector(".appcard-actions");
+    const top = card.querySelector(".appcard-top");
+    const isAccept = btn.classList.contains("btn-accept");
+    let pill = top.querySelector(".status-pill");
+    if(!pill){
+      pill = document.createElement("span");
+      pill.className = "status-pill";
+      top.appendChild(pill);
+    }
+    if(isAccept){
+      pill.className = "status-pill status-accepted";
+      pill.textContent = "✓ Angenommen";
+      actions.innerHTML = `<button class="btn-accept" style="background:var(--ink);">📅 Zum Gespräch einladen</button>`;
+    } else {
+      pill.className = "status-pill status-declined";
+      pill.textContent = "Abgesagt";
+      actions.remove();
+    }
+  });
+});
+</script>
+</body>
+</html>

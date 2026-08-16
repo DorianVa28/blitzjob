@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Blitzjob — Job in 60 Sekunden</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;800;900&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#F5F7F0;
+    --surface:#FFFFFF;
+    --ink:#14261C;
+    --ink-soft:#4B5B50;
+    --forest:#2D6A4F;
+    --forest-dark:#1F4A37;
+    --coral:#FF5A36;
+    --coral-dark:#E24421;
+    --amber:#FFD23F;
+    --line:#DEE6D6;
+    --radius:18px;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--bg);
+    color:var(--ink);
+    font-family:'Inter',sans-serif;
+    line-height:1.5;
+    -webkit-font-smoothing:antialiased;
+  }
+  .mono{font-family:'IBM Plex Mono',monospace;}
+  h1,h2,h3,.display{font-family:'Unbounded',sans-serif;}
+  a{color:inherit;}
+  img,svg{display:block;}
+
+  /* ===== layout helpers ===== */
+  .wrap{max-width:1080px; margin:0 auto; padding:0 24px;}
+  section{padding:88px 0;}
+  @media(max-width:640px){ section{padding:56px 0;} }
+
+  /* ===== header ===== */
+  header{
+    position:sticky; top:0; z-index:50;
+    background:rgba(245,247,240,0.88);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--line);
+  }
+  .headbar{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:14px 24px; max-width:1080px; margin:0 auto;
+  }
+  .logo{
+    display:flex; align-items:center; gap:8px;
+    font-family:'Unbounded',sans-serif; font-weight:800; font-size:18px;
+  }
+  .logo .bolt{
+    width:26px; height:26px; border-radius:8px; background:var(--coral);
+    display:flex; align-items:center; justify-content:center; color:white; font-size:15px;
+  }
+  .langpills{display:flex; gap:6px; background:var(--surface); border:1px solid var(--line); padding:4px; border-radius:999px;}
+  .langpills button{
+    border:none; background:transparent; padding:6px 12px; border-radius:999px;
+    font-family:'IBM Plex Mono',monospace; font-size:12px; font-weight:600; letter-spacing:.03em;
+    cursor:pointer; color:var(--ink-soft); transition:.15s;
+  }
+  .langpills button.active{background:var(--forest); color:white;}
+
+  /* ===== hero ===== */
+  .hero{padding-top:56px; padding-bottom:40px;}
+  .eyebrow{
+    display:inline-flex; align-items:center; gap:8px;
+    font-family:'IBM Plex Mono',monospace; font-size:12px; font-weight:600;
+    color:var(--forest); background:#E7F0E4; border:1px solid #CFE3C8;
+    padding:6px 12px; border-radius:999px; letter-spacing:.04em; margin-bottom:22px;
+  }
+  .eyebrow .dot{width:7px; height:7px; border-radius:50%; background:var(--coral); animation:pulse 1.4s infinite;}
+  @keyframes pulse{0%,100%{opacity:1} 50%{opacity:.3}}
+  h1.hero-title{
+    font-size:clamp(34px,6vw,64px); font-weight:900; line-height:1.02; letter-spacing:-0.02em;
+    max-width:820px;
+  }
+  h1.hero-title .accent{color:var(--coral);}
+  .hero-sub{
+    margin-top:22px; font-size:18px; color:var(--ink-soft); max-width:560px;
+  }
+  .hero-ctas{display:flex; gap:12px; margin-top:32px; flex-wrap:wrap;}
+  .btn{
+    font-family:'Unbounded',sans-serif; font-weight:600; font-size:14.5px;
+    padding:15px 26px; border-radius:999px; border:none; cursor:pointer;
+    display:inline-flex; align-items:center; gap:8px; transition:transform .12s ease, box-shadow .12s ease;
+  }
+  .btn:active{transform:scale(0.97);}
+  .btn-primary{background:var(--coral); color:white; box-shadow:0 8px 20px -8px rgba(255,90,54,.6);}
+  .btn-primary:hover{background:var(--coral-dark);}
+  .btn-ghost{background:transparent; color:var(--ink); border:1.5px solid var(--line);}
+  .btn-ghost:hover{border-color:var(--forest); color:var(--forest);}
+
+  /* ===== stopwatch signature ===== */
+  .stopwatch-strip{
+    margin-top:52px; display:flex; align-items:center; gap:18px; flex-wrap:wrap;
+    border-top:1px solid var(--line); border-bottom:1px solid var(--line); padding:18px 0;
+  }
+  .sw-time{
+    font-family:'IBM Plex Mono',monospace; font-size:34px; font-weight:600; color:var(--forest-dark);
+    min-width:92px;
+  }
+  .sw-label{font-size:13px; color:var(--ink-soft); max-width:340px;}
+  .sw-bar{flex:1; min-width:140px; height:6px; background:var(--line); border-radius:99px; overflow:hidden;}
+  .sw-bar-fill{height:100%; width:0%; background:linear-gradient(90deg,var(--amber),var(--coral)); transition:width .3s linear;}
+
+  /* ===== section headers ===== */
+  .section-head{max-width:600px; margin-bottom:44px;}
+  .kicker{
+    font-family:'IBM Plex Mono',monospace; font-size:12px; font-weight:600; color:var(--forest);
+    text-transform:uppercase; letter-spacing:.08em; margin-bottom:10px; display:block;
+  }
+  .section-head h2{font-size:clamp(26px,4vw,38px); font-weight:800; letter-spacing:-0.01em;}
+  .section-head p{margin-top:12px; color:var(--ink-soft); font-size:16px;}
+
+  /* ===== demo phone ===== */
+  .demo-shell{
+    display:grid; grid-template-columns:1.1fr 1fr; gap:56px; align-items:start;
+  }
+  @media(max-width:860px){ .demo-shell{grid-template-columns:1fr;} }
+
+  .phone{
+    background:var(--ink); border-radius:32px; padding:10px; width:100%; max-width:380px; margin:0 auto;
+    box-shadow:0 30px 60px -20px rgba(20,38,28,.35);
+  }
+  .phone-screen{
+    background:var(--surface); border-radius:24px; overflow:hidden; display:flex; flex-direction:column;
+    height:560px;
+  }
+  .phone-topbar{
+    background:var(--forest); color:white; padding:14px 16px;
+    display:flex; align-items:center; justify-content:space-between;
+  }
+  .phone-topbar .who{display:flex; align-items:center; gap:8px; font-weight:600; font-size:14px;}
+  .phone-topbar .avatar{width:26px; height:26px; border-radius:50%; background:var(--amber); display:flex; align-items:center; justify-content:center; font-size:14px;}
+  .phone-timer{
+    font-family:'IBM Plex Mono',monospace; font-size:13px; background:rgba(255,255,255,.18);
+    padding:4px 10px; border-radius:999px;
+  }
+  .chat-body{
+    flex:1; overflow-y:auto; padding:16px; display:flex; flex-direction:column; gap:10px;
+    background:#F8FAF5;
+  }
+  .bubble{max-width:80%; padding:10px 14px; border-radius:16px; font-size:14px; line-height:1.4; animation:rise .25s ease;}
+  @keyframes rise{from{opacity:0; transform:translateY(6px);} to{opacity:1; transform:translateY(0);}}
+  .bubble.bot{background:var(--surface); border:1px solid var(--line); align-self:flex-start; border-bottom-left-radius:4px;}
+  .bubble.user{background:var(--forest); color:white; align-self:flex-end; border-bottom-right-radius:4px;}
+  .chips{display:flex; flex-wrap:wrap; gap:8px; padding:2px 16px 16px;}
+  .chip{
+    font-family:'Inter',sans-serif; font-size:13px; font-weight:600; padding:9px 14px;
+    border-radius:999px; border:1.5px solid var(--forest); background:white; color:var(--forest);
+    cursor:pointer; transition:.12s;
+  }
+  .chip:hover{background:var(--forest); color:white;}
+  .matchcard{
+    background:white; border:1.5px solid var(--line); border-radius:14px; padding:12px; margin-top:4px;
+    animation:rise .3s ease;
+  }
+  .matchcard .mc-top{display:flex; justify-content:space-between; align-items:flex-start; gap:8px;}
+  .matchcard h4{font-size:14.5px; font-weight:700;}
+  .matchcard .mc-meta{font-size:12px; color:var(--ink-soft); margin-top:2px;}
+  .mc-badge{
+    font-family:'IBM Plex Mono',monospace; font-size:11px; background:#E7F0E4; color:var(--forest-dark);
+    padding:3px 8px; border-radius:999px; white-space:nowrap;
+  }
+  .mc-apply{
+    margin-top:10px; width:100%; background:var(--coral); color:white; border:none; border-radius:999px;
+    padding:9px; font-weight:700; font-size:13px; cursor:pointer; font-family:'Inter',sans-serif;
+  }
+  .mc-apply:active{transform:scale(.98);}
+  .mc-apply.sent{background:var(--forest);}
+
+  .demo-side h3{font-size:22px; font-weight:800; margin-bottom:14px;}
+  .demo-steps{list-style:none; display:flex; flex-direction:column; gap:16px;}
+  .demo-steps li{display:flex; gap:14px; align-items:flex-start;}
+  .step-num{
+    font-family:'IBM Plex Mono',monospace; font-weight:600; font-size:13px; color:var(--forest);
+    background:#E7F0E4; width:28px; height:28px; border-radius:50%; display:flex; align-items:center; justify-content:center;
+    flex-shrink:0; margin-top:2px;
+  }
+  .step-text b{display:block; font-size:14.5px; margin-bottom:2px;}
+  .step-text span{font-size:13.5px; color:var(--ink-soft);}
+
+  /* ===== comparison ===== */
+  .compare{
+    display:grid; grid-template-columns:1fr 1fr; gap:0; border:1.5px solid var(--line); border-radius:var(--radius);
+    overflow:hidden;
+  }
+  @media(max-width:640px){ .compare{grid-template-columns:1fr;} }
+  .compare-col{padding:26px 24px;}
+  .compare-col.them{background:var(--surface); border-right:1.5px solid var(--line);}
+  .compare-col.us{background:var(--forest); color:white;}
+  .compare-col h4{font-family:'Unbounded',sans-serif; font-size:16px; margin-bottom:16px;}
+  .compare-col ul{list-style:none; display:flex; flex-direction:column; gap:11px;}
+  .compare-col li{font-size:14px; display:flex; gap:8px; align-items:flex-start;}
+  .compare-col.them li:before{content:"–"; color:#B7C3AC; font-weight:700;}
+  .compare-col.us li:before{content:"⚡"; }
+
+  /* ===== company teaser (minimal) ===== */
+  .company-teaser{
+    display:grid; grid-template-columns:1.1fr .9fr; gap:52px; align-items:center;
+  }
+  @media(max-width:860px){ .company-teaser{grid-template-columns:1fr;} }
+  .company-teaser-text p{margin-top:14px; color:var(--ink-soft); font-size:15.5px; max-width:480px;}
+  .teaser-list{list-style:none; margin:22px 0 26px; display:flex; flex-direction:column; gap:9px;}
+  .teaser-list li{font-size:14px; color:var(--ink-soft);}
+  .teaser-note{margin-top:12px; font-size:12px; color:var(--ink-soft); opacity:.75;}
+
+  .mini-dash{
+    background:var(--surface); border:1.5px solid var(--line); border-radius:20px; padding:18px;
+    max-width:360px; margin:0 auto; box-shadow:0 24px 48px -20px rgba(20,38,28,.18);
+  }
+  .mini-dash-top{
+    display:flex; justify-content:space-between; align-items:center; font-weight:700; font-size:13.5px;
+    padding-bottom:12px; margin-bottom:12px; border-bottom:1px solid var(--line);
+  }
+  .mini-dash-top .mono{font-family:'IBM Plex Mono',monospace; font-size:11.5px; color:var(--forest); background:#E7F0E4; padding:3px 9px; border-radius:999px;}
+  .mini-row{display:flex; align-items:center; gap:10px; padding:9px 0; border-bottom:1px solid #F0F3EC;}
+  .mini-row:last-child{border-bottom:none;}
+  .mini-avatar{width:32px; height:32px; border-radius:50%; background:var(--forest); color:#fff; font-size:11.5px; font-weight:700; display:flex; align-items:center; justify-content:center; flex-shrink:0;}
+  .mini-info{flex:1; display:flex; flex-direction:column;}
+  .mini-info b{font-size:13px;}
+  .mini-info span{font-size:11.5px; color:var(--ink-soft);}
+  .mini-badge{font-family:'IBM Plex Mono',monospace; font-size:10px; background:#E7F0E4; color:var(--forest-dark); padding:3px 7px; border-radius:999px; white-space:nowrap;}
+
+  /* ===== footer ===== */
+  footer{border-top:1px solid var(--line); padding:36px 0; text-align:center;}
+  footer p{font-size:13px; color:var(--ink-soft);}
+  footer .fbolt{font-family:'Unbounded',sans-serif; font-weight:800; color:var(--ink); margin-bottom:6px;}
+
+  ::-webkit-scrollbar{width:6px;}
+  ::-webkit-scrollbar-thumb{background:var(--line); border-radius:99px;}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="headbar">
+    <div class="logo"><span class="bolt">⚡</span><span>Blitzjob</span></div>
+    <div class="langpills">
+      <button class="lang-btn active" data-lang="de">DE</button>
+      <button class="lang-btn" data-lang="fr">FR</button>
+      <button class="lang-btn" data-lang="nl">NL</button>
+    </div>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="wrap">
+    <div class="eyebrow"><span class="dot"></span><span data-i18n="eyebrow">NUR FÜR OSTBELGIEN · DE · FR · NL</span></div>
+    <h1 class="hero-title" data-i18n="heroTitle">Dein nächster Job.<br>In <span class="accent">60 Sekunden</span> gematcht.</h1>
+    <p class="hero-sub" data-i18n="heroSub">Kein Lebenslauf, kein Formular. Du chattest kurz mit unserem Bot — er findet den passenden Studentenjob bei einem lokalen Betrieb in deiner Nähe.</p>
+    <div class="hero-ctas">
+      <button class="btn btn-primary" onclick="document.getElementById('demo').scrollIntoView()"><span data-i18n="ctaStudent">🎓 Ich bin Student:in</span></button>
+      <button class="btn btn-ghost" onclick="document.getElementById('company').scrollIntoView()"><span data-i18n="ctaCompany">🏢 Ich bin Unternehmen</span></button>
+    </div>
+
+    <div class="stopwatch-strip">
+      <div class="sw-time mono" id="heroTimer">0:00</div>
+      <div class="sw-bar"><div class="sw-bar-fill" id="heroBarFill"></div></div>
+      <div class="sw-label" data-i18n="swLabel">So lange dauert im Schnitt eine komplette Bewerbung im Demo-Chat unten — probier's aus.</div>
+    </div>
+  </div>
+</section>
+
+<section id="demo">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="kicker" data-i18n="demoKicker">Live-Prototyp</span>
+      <h2 data-i18n="demoTitle">So fühlt sich der Chatbot an</h2>
+      <p data-i18n="demoSub">Tipp dich durch — genau so würde ein Student in unter einer Minute zu einem Job kommen.</p>
+    </div>
+
+    <div class="demo-shell">
+      <div class="phone">
+        <div class="phone-screen">
+          <div class="phone-topbar">
+            <div class="who"><div class="avatar">⚡</div><span data-i18n="botName">Blitzjob-Bot</span></div>
+            <div class="phone-timer mono" id="phoneTimer">0:00</div>
+          </div>
+          <div class="chat-body" id="chatBody"></div>
+        </div>
+      </div>
+
+      <div class="demo-side">
+        <h3 data-i18n="demoSideTitle">Warum das funktioniert</h3>
+        <ul class="demo-steps">
+          <li><div class="step-num">1</div><div class="step-text"><b data-i18n="s1t">Tippen statt tippen</b><span data-i18n="s1d">Antworten sind Chips, kein Formular. Kein Lebenslauf hochladen nötig.</span></div></li>
+          <li><div class="step-num">2</div><div class="step-text"><b data-i18n="s2t">Lokal & konkret</b><span data-i18n="s2d">Der Bot kennt echte Betriebe aus Eupen, St. Vith, Kelmis & Co. — nicht landesweites Rauschen.</span></div></li>
+          <li><div class="step-num">3</div><div class="step-text"><b data-i18n="s3t">Ein Klick zur Bewerbung</b><span data-i18n="s3d">Kein Anschreiben. Der Bot schickt dein Mini-Profil direkt ans Unternehmen.</span></div></li>
+          <li><div class="step-num">4</div><div class="step-text"><b data-i18n="s4t">Dreisprachig von Anfang an</b><span data-i18n="s4d">Der Chat läuft auf Deutsch, Französisch oder Niederländisch — deine Wahl.</span></div></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="section-head">
+      <span class="kicker" data-i18n="cmpKicker">Der Unterschied</span>
+      <h2 data-i18n="cmpTitle">Es gibt Jobbörsen in Belgien. Nicht so eine.</h2>
+    </div>
+    <div class="compare">
+      <div class="compare-col them">
+        <h4 data-i18n="themTitle">Landesweite Portale</h4>
+        <ul>
+          <li data-i18n="them1">Profil & Formular ausfüllen, bevor überhaupt etwas passiert</li>
+          <li data-i18n="them2">NL/FR-zentriert, kaum ostbelgische Betriebe sichtbar</li>
+          <li data-i18n="them3">Klassische Filterliste, kein geführter Dialog</li>
+          <li data-i18n="them4">Für alle Jobtypen gemacht — Studenten gehen unter</li>
+        </ul>
+      </div>
+      <div class="compare-col us">
+        <h4 data-i18n="usTitle">Blitzjob</h4>
+        <ul>
+          <li data-i18n="us1">Chatbot statt Formular — Antwort per Klick, unter 60 Sekunden</li>
+          <li data-i18n="us2">Gebaut für die DG: Deutsch zuerst, FR & NL selbstverständlich</li>
+          <li data-i18n="us3">Nur lokale Kleinbetriebe aus der Region</li>
+          <li data-i18n="us4">100&nbsp;% auf Studentenjobs zugeschnitten</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="company">
+  <div class="wrap">
+    <div class="company-teaser">
+      <div class="company-teaser-text">
+        <span class="kicker" data-i18n="compKicker">Für Unternehmen</span>
+        <h2 data-i18n="compTitle">Ein Konto. Eine Anzeige. Alle Bewerbungen an einem Ort.</h2>
+        <p data-i18n="compSub">Registrierung mit kurzer, manueller Prüfung — danach verwaltet ihr Anzeigen und Bewerbungen in einem einzigen, einfachen Dashboard. Kein Schnickschnack, keine fünf Klicks für eine Anzeige.</p>
+        <ul class="teaser-list">
+          <li data-i18n="tl1">✓ Einmal verifiziert, dauerhaft freigeschaltet</li>
+          <li data-i18n="tl2">✓ Anzeige online in unter 2 Minuten</li>
+          <li data-i18n="tl3">✓ Bewerbungen direkt im Dashboard annehmen oder absagen</li>
+        </ul>
+        <a class="btn btn-primary" href="dashboard-preview.html" target="_blank" rel="noopener" data-i18n="compCta">Dashboard-Vorschau ansehen →</a>
+        <div class="teaser-note" data-i18n="compNote">Vorschau eines künftigen Features — im Prototyp noch nicht mit dem Chat verbunden.</div>
+      </div>
+      <div class="company-teaser-visual">
+        <div class="mini-dash">
+          <div class="mini-dash-top"><span>📋 Bewerbungen</span><span class="mono">3 neu</span></div>
+          <div class="mini-row"><div class="mini-avatar">LB</div><div class="mini-info"><b>Lena B.</b><span>Eupen · 5–10 Std/Woche</span></div><span class="mini-badge">verifiziert</span></div>
+          <div class="mini-row"><div class="mini-avatar">JP</div><div class="mini-info"><b>Jonas P.</b><span>Kelmis · Wochenende</span></div></div>
+          <div class="mini-row"><div class="mini-avatar">MD</div><div class="mini-info"><b>Marie D.</b><span>Raeren · Vormittags</span></div><span class="mini-badge">verifiziert</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="fbolt">⚡ Blitzjob</div>
+    <p data-i18n="footNote">Interaktiver Prototyp · gebaut für Ostbelgien · Deutsch · Français · Nederlands</p>
+  </div>
+</footer>
+
+<script>
+/* ================= i18n ================= */
+const i18n = {
+  de: {
+    eyebrow:"NUR FÜR OSTBELGIEN · DE · FR · NL",
+    heroTitle:'Dein nächster Job.<br>In <span class="accent">60 Sekunden</span> gematcht.',
+    heroSub:"Kein Lebenslauf, kein Formular. Du chattest kurz mit unserem Bot — er findet den passenden Studentenjob bei einem lokalen Betrieb in deiner Nähe.",
+    ctaStudent:"🎓 Ich bin Student:in", ctaCompany:"🏢 Ich bin Unternehmen",
+    swLabel:"So lange dauert im Schnitt eine komplette Bewerbung im Demo-Chat unten — probier's aus.",
+    demoKicker:"Live-Prototyp", demoTitle:"So fühlt sich der Chatbot an",
+    demoSub:"Tipp dich durch — genau so würde ein Student in unter einer Minute zu einem Job kommen.",
+    botName:"Blitzjob-Bot", demoSideTitle:"Warum das funktioniert",
+    s1t:"Tippen statt tippen", s1d:"Antworten sind Chips, kein Formular. Kein Lebenslauf hochladen nötig.",
+    s2t:"Lokal & konkret", s2d:"Der Bot kennt echte Betriebe aus Eupen, St. Vith, Kelmis & Co. — nicht landesweites Rauschen.",
+    s3t:"Ein Klick zur Bewerbung", s3d:"Kein Anschreiben. Der Bot schickt dein Mini-Profil direkt ans Unternehmen.",
+    s4t:"Dreisprachig von Anfang an", s4d:"Der Chat läuft auf Deutsch, Französisch oder Niederländisch — deine Wahl.",
+    cmpKicker:"Der Unterschied", cmpTitle:"Es gibt Jobbörsen in Belgien. Nicht so eine.",
+    themTitle:"Landesweite Portale",
+    them1:"Profil & Formular ausfüllen, bevor überhaupt etwas passiert",
+    them2:"NL/FR-zentriert, kaum ostbelgische Betriebe sichtbar",
+    them3:"Klassische Filterliste, kein geführter Dialog",
+    them4:"Für alle Jobtypen gemacht — Studenten gehen unter",
+    usTitle:"Blitzjob",
+    us1:"Chatbot statt Formular — Antwort per Klick, unter 60 Sekunden",
+    us2:"Gebaut für die DG: Deutsch zuerst, FR & NL selbstverständlich",
+    us3:"Nur lokale Kleinbetriebe aus der Region",
+    us4:"100&nbsp;% auf Studentenjobs zugeschnitten",
+    compKicker:"Für Unternehmen", compTitle:"Ein Konto. Eine Anzeige. Alle Bewerbungen an einem Ort.",
+    compSub:"Registrierung mit kurzer, manueller Prüfung — danach verwaltet ihr Anzeigen und Bewerbungen in einem einzigen, einfachen Dashboard. Kein Schnickschnack, keine fünf Klicks für eine Anzeige.",
+    tl1:"✓ Einmal verifiziert, dauerhaft freigeschaltet", tl2:"✓ Anzeige online in unter 2 Minuten", tl3:"✓ Bewerbungen direkt im Dashboard annehmen oder absagen",
+    compCta:"Dashboard-Vorschau ansehen →", compNote:"Vorschau eines künftigen Features — im Prototyp noch nicht mit dem Chat verbunden.",
+    lblRole:"GESUCHTE ROLLE", lblCompany:"BETRIEB & ORT", lblHours:"STD./WOCHE", lblWage:"LOHN/STD.", lblStart:"START",
+    optNow:"Sofort", optWeeks:"In 2 Wochen", optMonth:"Nächster Monat",
+    previewEyebrow:"SO SEHEN STUDENTEN DEINE ANZEIGE", pvBtn:"1-Klick-Bewerbung ansehen →",
+    footNote:"Interaktiver Prototyp · gebaut für Ostbelgien · Deutsch · Français · Nederlands",
+    chat:[
+      {bot:"Hey! 👋 Was machst du am liebsten?", chips:["Service & Gastro","Lager & Logistik","Büro & Admin","Nachhilfe geben"]},
+      {bot:"Cool. Wo bist du unterwegs?", chips:["Eupen","St. Vith","Kelmis","Raeren"]},
+      {bot:"Wie viel Zeit hast du pro Woche?", chips:["Unter 5 Std","5–10 Std","10–20 Std","Nur Wochenende"]},
+      {bot:"Ab wann kannst du starten?", chips:["Sofort","In 2 Wochen","Nächster Monat"]}
+    ],
+    matchIntro:"Match gefunden! 🎉 Zwei Betriebe passen zu dir:",
+    matches:[
+      {role:"Aushilfe Service", company:"Café Belvedere · Eupen", meta:"8–12 Std/Woche · 12,50 €"},
+      {role:"Lagerhilfe", company:"Bau Meyer & Söhne · Raeren", meta:"10 Std/Woche · 13,00 €"}
+    ],
+    apply:"1-Klick bewerben", applied:"✓ Bewerbung gesendet"
+  },
+  fr: {
+    eyebrow:"UNIQUEMENT POUR LA BELGIQUE DE L'EST · DE · FR · NL",
+    heroTitle:'Ton prochain job.<br>Matché en <span class="accent">60 secondes</span>.',
+    heroSub:"Pas de CV, pas de formulaire. Tu discutes brièvement avec notre bot — il trouve le job étudiant qui te correspond chez une entreprise locale.",
+    ctaStudent:"🎓 Je suis étudiant(e)", ctaCompany:"🏢 Je suis une entreprise",
+    swLabel:"C'est la durée moyenne d'une candidature complète dans le chat démo ci-dessous — essaie.",
+    demoKicker:"Prototype live", demoTitle:"Voici à quoi ressemble le chatbot",
+    demoSub:"Clique et avance — c'est exactement comme ça qu'un(e) étudiant(e) trouve un job en moins d'une minute.",
+    botName:"Blitzjob-Bot", demoSideTitle:"Pourquoi ça marche",
+    s1t:"Cliquer plutôt que taper", s1d:"Les réponses sont des puces, pas un formulaire. Aucun CV à téléverser.",
+    s2t:"Local & concret", s2d:"Le bot connaît de vraies entreprises d'Eupen, Saint-Vith, La Calamine & co.",
+    s3t:"Candidature en un clic", s3d:"Pas de lettre de motivation. Le bot envoie ton mini-profil directement à l'entreprise.",
+    s4t:"Trilingue dès le départ", s4d:"Le chat fonctionne en allemand, français ou néerlandais — à ton choix.",
+    cmpKicker:"La différence", cmpTitle:"Il existe des sites d'emploi en Belgique. Pas comme celui-ci.",
+    themTitle:"Portails nationaux",
+    them1:"Remplir un profil avant même qu'il ne se passe quelque chose",
+    them2:"Centrés NL/FR, peu d'entreprises de l'Est visibles",
+    them3:"Liste classique avec filtres, aucun dialogue guidé",
+    them4:"Conçus pour tous les types d'emploi — les étudiants s'y perdent",
+    usTitle:"Blitzjob",
+    us1:"Chatbot au lieu d'un formulaire — réponse en un clic, moins de 60 secondes",
+    us2:"Conçu pour la Communauté germanophone : allemand d'abord, FR & NL naturellement",
+    us3:"Uniquement des petites entreprises locales de la région",
+    us4:"100&nbsp;% dédié aux jobs étudiants",
+    compKicker:"Pour les entreprises", compTitle:"Un compte. Une annonce. Toutes les candidatures au même endroit.",
+    compSub:"Inscription avec une courte vérification manuelle — ensuite, gérez annonces et candidatures dans un seul tableau de bord simple. Pas de fioritures, pas cinq clics pour une annonce.",
+    tl1:"✓ Vérifié une fois, activé durablement", tl2:"✓ Annonce en ligne en moins de 2 minutes", tl3:"✓ Accepter ou refuser les candidatures directement dans le tableau de bord",
+    compCta:"Voir l'aperçu du tableau de bord →", compNote:"Aperçu d'une fonctionnalité future — pas encore relié au chat dans ce prototype.",
+    lblRole:"POSTE RECHERCHÉ", lblCompany:"ENTREPRISE & LIEU", lblHours:"H./SEMAINE", lblWage:"SALAIRE/H", lblStart:"DÉBUT",
+    optNow:"Immédiatement", optWeeks:"Dans 2 semaines", optMonth:"Le mois prochain",
+    previewEyebrow:"CE QUE VOIENT LES ÉTUDIANTS", pvBtn:"Voir la candidature en 1 clic →",
+    footNote:"Prototype interactif · conçu pour la Belgique de l'Est · Deutsch · Français · Nederlands",
+    chat:[
+      {bot:"Salut ! 👋 Qu'est-ce que tu préfères faire ?", chips:["Service & Horeca","Entrepôt & Logistique","Bureau & Admin","Cours particuliers"]},
+      {bot:"Top. Tu es plutôt dans quel coin ?", chips:["Eupen","Saint-Vith","La Calamine","Raeren"]},
+      {bot:"Combien de temps as-tu par semaine ?", chips:["Moins de 5h","5–10h","10–20h","Week-end seulement"]},
+      {bot:"Tu peux commencer quand ?", chips:["Immédiatement","Dans 2 semaines","Le mois prochain"]}
+    ],
+    matchIntro:"Match trouvé ! 🎉 Deux entreprises te correspondent :",
+    matches:[
+      {role:"Aide en salle", company:"Café Belvedere · Eupen", meta:"8–12h/semaine · 12,50 €"},
+      {role:"Aide entrepôt", company:"Bau Meyer & Söhne · Raeren", meta:"10h/semaine · 13,00 €"}
+    ],
+    apply:"Postuler en 1 clic", applied:"✓ Candidature envoyée"
+  },
+  nl: {
+    eyebrow:"ALLEEN VOOR OOST-BELGIË · DE · FR · NL",
+    heroTitle:'Jouw volgende job.<br>Gematcht in <span class="accent">60 seconden</span>.',
+    heroSub:"Geen cv, geen formulier. Je chat even kort met onze bot — hij vindt de passende studentenjob bij een lokaal bedrijf in jouw buurt.",
+    ctaStudent:"🎓 Ik ben student", ctaCompany:"🏢 Ik ben een bedrijf",
+    swLabel:"Zo lang duurt gemiddeld een volledige sollicitatie in de demo-chat hieronder — probeer het.",
+    demoKicker:"Live prototype", demoTitle:"Zo voelt de chatbot aan",
+    demoSub:"Klik je erdoorheen — zo vindt een student in minder dan een minuut een job.",
+    botName:"Blitzjob-bot", demoSideTitle:"Waarom dit werkt",
+    s1t:"Klikken in plaats van typen", s1d:"Antwoorden zijn chips, geen formulier. Geen cv nodig.",
+    s2t:"Lokaal & concreet", s2d:"De bot kent echte bedrijven uit Eupen, Sankt-Vith, Kelmis & co.",
+    s3t:"Solliciteren in één klik", s3d:"Geen motivatiebrief. De bot stuurt je miniprofiel rechtstreeks naar het bedrijf.",
+    s4t:"Drietalig vanaf dag één", s4d:"De chat werkt in het Duits, Frans of Nederlands — jouw keuze.",
+    cmpKicker:"Het verschil", cmpTitle:"Er bestaan jobsites in België. Niet zo een.",
+    themTitle:"Landelijke portalen",
+    them1:"Profiel invullen voordat er iets gebeurt",
+    them2:"NL/FR-gericht, nauwelijks Oost-Belgische bedrijven zichtbaar",
+    them3:"Klassieke filterlijst, geen begeleide dialoog",
+    them4:"Voor alle soorten jobs gemaakt — studenten vallen weg",
+    usTitle:"Blitzjob",
+    us1:"Chatbot in plaats van formulier — antwoord met één klik, onder 60 seconden",
+    us2:"Gebouwd voor de Duitstalige Gemeenschap: Duits eerst, FR & NL vanzelfsprekend",
+    us3:"Alleen lokale kleine bedrijven uit de regio",
+    us4:"100&nbsp;% toegespitst op studentenjobs",
+    compKicker:"Voor bedrijven", compTitle:"Eén account. Eén advertentie. Alle sollicitaties op één plek.",
+    compSub:"Registratie met korte, manuele controle — daarna beheer je advertenties en sollicitaties in één eenvoudig dashboard. Geen poespas, geen vijf klikken voor één advertentie.",
+    tl1:"✓ Eenmalig geverifieerd, blijvend vrijgeschakeld", tl2:"✓ Advertentie online in minder dan 2 minuten", tl3:"✓ Sollicitaties rechtstreeks in het dashboard aanvaarden of afwijzen",
+    compCta:"Bekijk dashboard-voorbeeld →", compNote:"Voorbeeld van een toekomstige functie — in dit prototype nog niet gekoppeld aan de chat.",
+    lblRole:"GEZOCHTE FUNCTIE", lblCompany:"BEDRIJF & PLAATS", lblHours:"U./WEEK", lblWage:"LOON/U", lblStart:"START",
+    optNow:"Onmiddellijk", optWeeks:"Over 2 weken", optMonth:"Volgende maand",
+    previewEyebrow:"ZO ZIEN STUDENTEN JOUW ADVERTENTIE", pvBtn:"Bekijk sollicitatie in 1 klik →",
+    footNote:"Interactief prototype · gebouwd voor Oost-België · Deutsch · Français · Nederlands",
+    chat:[
+      {bot:"Hey! 👋 Wat doe je het liefst?", chips:["Bediening & Horeca","Magazijn & Logistiek","Kantoor & Admin","Bijles geven"]},
+      {bot:"Top. Waar ben je actief?", chips:["Eupen","Sankt-Vith","Kelmis","Raeren"]},
+      {bot:"Hoeveel tijd heb je per week?", chips:["Minder dan 5u","5–10u","10–20u","Enkel weekend"]},
+      {bot:"Wanneer kan je starten?", chips:["Onmiddellijk","Over 2 weken","Volgende maand"]}
+    ],
+    matchIntro:"Match gevonden! 🎉 Twee bedrijven passen bij jou:",
+    matches:[
+      {role:"Hulp bediening", company:"Café Belvedere · Eupen", meta:"8–12u/week · 12,50 €"},
+      {role:"Magazijnhulp", company:"Bau Meyer & Söhne · Raeren", meta:"10u/week · 13,00 €"}
+    ],
+    apply:"Solliciteer in 1 klik", applied:"✓ Sollicitatie verzonden"
+  }
+};
+
+let currentLang = "de";
+
+function applyLang(lang){
+  currentLang = lang;
+  document.querySelectorAll(".lang-btn").forEach(b=>b.classList.toggle("active", b.dataset.lang===lang));
+  document.querySelectorAll("[data-i18n]").forEach(el=>{
+    const key = el.getAttribute("data-i18n");
+    if(i18n[lang][key] !== undefined) el.innerHTML = i18n[lang][key];
+  });
+  resetChat();
+}
+document.querySelectorAll(".lang-btn").forEach(b=>b.addEventListener("click", ()=>applyLang(b.dataset.lang)));
+
+/* ================= stopwatch ================= */
+let swInterval = null, swSeconds = 0;
+function fmt(s){ const m=Math.floor(s/60); const sec=s%60; return m+":"+String(sec).padStart(2,"0"); }
+function startStopwatch(){
+  stopStopwatch();
+  swSeconds = 0;
+  document.getElementById("heroTimer").textContent = "0:00";
+  document.getElementById("phoneTimer").textContent = "0:00";
+  document.getElementById("heroBarFill").style.width = "0%";
+  swInterval = setInterval(()=>{
+    swSeconds++;
+    const capped = Math.min(swSeconds, 60);
+    document.getElementById("heroTimer").textContent = fmt(swSeconds);
+    document.getElementById("phoneTimer").textContent = fmt(swSeconds);
+    document.getElementById("heroBarFill").style.width = (capped/60*100)+"%";
+  }, 1000);
+}
+function stopStopwatch(){ if(swInterval) clearInterval(swInterval); swInterval=null; }
+
+/* ================= chat engine ================= */
+let chatStep = 0;
+const chatBody = document.getElementById("chatBody");
+
+function addBubble(text, who){
+  const b = document.createElement("div");
+  b.className = "bubble " + who;
+  b.innerHTML = text;
+  chatBody.appendChild(b);
+  chatBody.scrollTop = chatBody.scrollHeight;
+  return b;
+}
+
+function addChips(options, onPick){
+  const wrap = document.createElement("div");
+  wrap.className = "chips";
+  options.forEach(opt=>{
+    const c = document.createElement("button");
+    c.className = "chip";
+    c.textContent = opt;
+    c.onclick = ()=>{
+      wrap.remove();
+      addBubble(opt, "user");
+      onPick(opt);
+    };
+    wrap.appendChild(c);
+  });
+  chatBody.appendChild(wrap);
+  chatBody.scrollTop = chatBody.scrollHeight;
+}
+
+function resetChat(){
+  chatBody.innerHTML = "";
+  chatStep = 0;
+  stopStopwatch();
+  document.getElementById("heroTimer").textContent = "0:00";
+  document.getElementById("phoneTimer").textContent = "0:00";
+  document.getElementById("heroBarFill").style.width = "0%";
+  setTimeout(runStep, 400);
+}
+
+function runStep(){
+  const t = i18n[currentLang];
+  if(chatStep === 0) startStopwatch();
+
+  if(chatStep < t.chat.length){
+    const step = t.chat[chatStep];
+    addBubble(step.bot, "bot");
+    addChips(step.chips, ()=>{
+      chatStep++;
+      setTimeout(runStep, 500);
+    });
+  } else {
+    stopStopwatch();
+    addBubble(t.matchIntro, "bot");
+    t.matches.forEach(m=>{
+      const card = document.createElement("div");
+      card.className = "matchcard";
+      card.innerHTML = `
+        <div class="mc-top">
+          <div><h4>${m.role}</h4><div class="mc-meta">${m.company}</div></div>
+          <div class="mc-badge">${m.meta}</div>
+        </div>
+        <button class="mc-apply">${t.apply}</button>
+      `;
+      const btn = card.querySelector(".mc-apply");
+      btn.onclick = ()=>{
+        btn.textContent = t.applied;
+        btn.classList.add("sent");
+        btn.disabled = true;
+      };
+      chatBody.appendChild(card);
+    });
+    chatBody.scrollTop = chatBody.scrollHeight;
+  }
+}
+
+/* init */
+resetChat();
+</script>
+</body>
+</html>
