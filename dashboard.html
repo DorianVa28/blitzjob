@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Blitzjob — Unternehmens-Dashboard (Vorschau)</title>
+<title>Blitzjob — Unternehmens-Dashboard</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;800;900&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
 <style>
@@ -28,10 +28,33 @@
 
   .wrap{max-width:1000px; margin:0 auto; padding:36px 24px 90px;}
 
-  .fiction-banner{
-    background:#FFF3D6; border:1px solid #F0DDA0; color:#8A6100; font-size:13px; font-weight:600;
-    padding:12px 16px; border-radius:12px; margin-bottom:32px; display:flex; align-items:center; gap:8px;
+  .msg{font-size:13px; font-weight:600; padding:12px 16px; border-radius:12px; margin-bottom:20px;}
+  .msg.err{background:#FBE4E4; color:#D64545;}
+  .msg.ok{background:#E7F0E4; color:var(--forest-dark);}
+
+  .authcard{background:var(--surface); border:1.5px solid var(--line); border-radius:var(--radius); padding:32px; max-width:420px; margin:40px auto;}
+  .authcard h2{font-size:20px; margin-bottom:6px;}
+  .authcard p.sub{font-size:13px; color:var(--ink-soft); margin-bottom:22px;}
+  .authtabs{display:flex; gap:6px; background:var(--bg); border:1px solid var(--line); padding:4px; border-radius:999px; margin-bottom:22px;}
+  .authtabs button{flex:1; border:none; background:transparent; padding:8px; border-radius:999px; font-size:13px; font-weight:600; color:var(--ink-soft);}
+  .authtabs button.active{background:var(--forest); color:#fff;}
+
+  .field{margin-bottom:14px;}
+  .field label{display:block; font-size:12.5px; font-weight:600; color:var(--ink-soft); margin-bottom:6px;}
+  .field input, .field select{
+    width:100%; padding:11px 13px; border:1.5px solid var(--line); border-radius:10px; font-size:14px;
+    font-family:'Inter',sans-serif; background:var(--surface); color:var(--ink);
   }
+  .field input:focus, .field select:focus{outline:none; border-color:var(--forest);}
+
+  .btn{
+    font-family:'Unbounded',sans-serif; font-weight:600; font-size:13.5px; padding:12px 20px; border-radius:999px; border:none;
+    display:inline-flex; align-items:center; gap:8px;
+  }
+  .btn-primary{background:var(--coral); color:#fff;}
+  .btn-primary:hover{background:var(--coral-dark);}
+  .btn-block{width:100%; justify-content:center;}
+  .btn-ghost{background:transparent; border:1.5px solid var(--line); color:var(--ink);}
 
   .dhead{display:flex; justify-content:space-between; align-items:flex-end; margin-bottom:28px; flex-wrap:wrap; gap:14px;}
   .dhead h1{font-size:clamp(22px,3.2vw,30px); font-weight:800;}
@@ -40,12 +63,11 @@
     font-family:'IBM Plex Mono',monospace; font-size:11px; font-weight:600; background:#E7F0E4; color:var(--forest-dark);
     padding:4px 10px; border-radius:999px;
   }
-  .btn{
-    font-family:'Unbounded',sans-serif; font-weight:600; font-size:13.5px; padding:12px 20px; border-radius:999px; border:none;
-    display:inline-flex; align-items:center; gap:8px;
+  .unverified-badge{
+    font-family:'IBM Plex Mono',monospace; font-size:11px; font-weight:600; background:#FFF3D6; color:#8A6100;
+    padding:4px 10px; border-radius:999px;
   }
-  .btn-primary{background:var(--coral); color:#fff;}
-  .btn-primary:hover{background:var(--coral-dark);}
+  .headright{display:flex; gap:10px; align-items:center;}
 
   .kpirow{display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin-bottom:32px;}
   @media(max-width:640px){.kpirow{grid-template-columns:1fr;}}
@@ -64,6 +86,10 @@
   .jobrow .jm{font-size:12.5px; color:var(--ink-soft); margin-top:2px;}
   .jobrow .jstat{font-family:'IBM Plex Mono',monospace; font-size:11px; background:#E7F0E4; color:var(--forest-dark); padding:4px 10px; border-radius:999px;}
 
+  .newjobcard{background:var(--surface); border:1.5px dashed var(--line); border-radius:var(--radius); padding:20px; margin-bottom:24px;}
+  .newjobcard .grid2{display:grid; grid-template-columns:1fr 1fr; gap:14px;}
+  @media(max-width:640px){.newjobcard .grid2{grid-template-columns:1fr;}}
+
   .appcard{
     background:var(--surface); border:1.5px solid var(--line); border-radius:var(--radius); padding:18px; margin-bottom:14px;
   }
@@ -72,7 +98,6 @@
   .avatar{width:40px; height:40px; border-radius:50%; background:var(--forest); color:#fff; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:14px; flex-shrink:0;}
   .appcard-name h4{font-size:15px; font-weight:700; display:flex; align-items:center; gap:8px;}
   .appcard-name .sub{font-size:12.5px; color:var(--ink-soft); margin-top:2px;}
-  .mini-badge{font-family:'IBM Plex Mono',monospace; font-size:10.5px; background:#E7F0E4; color:var(--forest-dark); padding:3px 8px; border-radius:999px;}
   .chiprow{display:flex; flex-wrap:wrap; gap:6px; margin-top:12px;}
   .chiprow span{font-family:'IBM Plex Mono',monospace; font-size:11px; background:#F0F3EC; color:var(--forest-dark); padding:4px 9px; border-radius:999px;}
   .appcard-actions{display:flex; gap:8px; margin-top:14px;}
@@ -83,6 +108,8 @@
   .status-declined{background:#FBE4E4; color:#D64545;}
 
   .empty-note{font-size:13px; color:var(--ink-soft); text-align:center; padding:20px; background:var(--surface); border:1.5px dashed var(--line); border-radius:14px;}
+  .loading-note{font-size:13px; color:var(--ink-soft); text-align:center; padding:40px;}
+  .hidden{display:none !important;}
 </style>
 </head>
 <body>
@@ -96,109 +123,347 @@
 
 <div class="wrap">
 
-  <div class="fiction-banner">🧪 Fiktive Vorschau — dieses Dashboard existiert noch nicht wirklich, es zeigt nur, wie es später aussehen könnte.</div>
+  <div id="loadingView" class="loading-note">Lädt…</div>
 
-  <div class="dhead">
-    <div>
-      <h1>Café Belvedere</h1>
-      <div class="co-line"><span class="verified-badge">✓ Verifiziert</span><span>Eupen · Gastronomie</span></div>
+  <!-- ===== Auth (Login / Registrierung) ===== -->
+  <div id="authView" class="authcard hidden">
+    <div class="authtabs">
+      <button id="tabLogin" class="active">Einloggen</button>
+      <button id="tabSignup">Registrieren</button>
     </div>
-    <button class="btn btn-primary">+ Neue Anzeige</button>
+    <div id="authMsg"></div>
+
+    <form id="loginForm">
+      <h2>Willkommen zurück</h2>
+      <p class="sub">Logg dich mit deinem Unternehmenskonto ein.</p>
+      <div class="field"><label>E-Mail</label><input type="email" id="loginEmail" required></div>
+      <div class="field"><label>Passwort</label><input type="password" id="loginPassword" required></div>
+      <button type="submit" class="btn btn-primary btn-block">Einloggen</button>
+    </form>
+
+    <form id="signupForm" class="hidden">
+      <h2>Konto erstellen</h2>
+      <p class="sub">Für Unternehmen — danach vervollständigst du dein Firmenprofil.</p>
+      <div class="field"><label>E-Mail</label><input type="email" id="signupEmail" required></div>
+      <div class="field"><label>Passwort (min. 6 Zeichen)</label><input type="password" id="signupPassword" minlength="6" required></div>
+      <button type="submit" class="btn btn-primary btn-block">Registrieren</button>
+    </form>
   </div>
 
-  <div class="kpirow">
-    <div class="kpi"><div class="num">2</div><div class="lbl">Aktive Anzeigen</div></div>
-    <div class="kpi"><div class="num">3</div><div class="lbl">Neue Bewerbungen</div></div>
-    <div class="kpi"><div class="num">1</div><div class="lbl">Zu Gesprächen eingeladen</div></div>
+  <!-- ===== Firmenprofil vervollständigen (nach erstem Login) ===== -->
+  <div id="completeProfileView" class="authcard hidden">
+    <h2>Firmenprofil anlegen</h2>
+    <p class="sub">Letzter Schritt, bevor du Anzeigen erstellen kannst.</p>
+    <div id="profileMsg"></div>
+    <form id="profileForm">
+      <div class="field"><label>Firmenname</label><input type="text" id="profCompanyName" required></div>
+      <div class="field"><label>Branche</label><input type="text" id="profIndustry" placeholder="z.B. Gastronomie"></div>
+      <div class="field">
+        <label>Standort</label>
+        <select id="profLocation">
+          <option value="eupen">Eupen</option>
+          <option value="stvith">St. Vith</option>
+          <option value="kelmis">Kelmis</option>
+          <option value="raeren">Raeren</option>
+        </select>
+      </div>
+      <button type="submit" class="btn btn-primary btn-block">Profil speichern</button>
+    </form>
   </div>
 
-  <div class="section-title">Eure Anzeigen <span class="sub">2 aktiv</span></div>
-  <div class="jobrow">
-    <div><div class="jt">Aushilfe Service</div><div class="jm">8–12 Std/Woche · 12,50 €/Std</div></div>
-    <span class="jstat">● Online</span>
-  </div>
-  <div class="jobrow">
-    <div><div class="jt">Wochenend-Aushilfe Küche</div><div class="jm">Nur Sa & So · 13,00 €/Std</div></div>
-    <span class="jstat">● Online</span>
-  </div>
+  <!-- ===== Dashboard ===== -->
+  <div id="dashboardView" class="hidden">
 
-  <div class="section-title" style="margin-top:32px;">Bewerbungen <span class="sub">alle Anzeigen</span></div>
-
-  <div class="appcard">
-    <div class="appcard-top">
-      <div class="appcard-name">
-        <div class="avatar">LB</div>
-        <div>
-          <h4>Lena B. <span class="mini-badge">✓ verifiziert</span></h4>
-          <div class="sub">Bewirbt sich auf: Aushilfe Service</div>
+    <div class="dhead">
+      <div>
+        <h1 id="dCompanyName">—</h1>
+        <div class="co-line">
+          <span id="dVerifiedBadge" class="unverified-badge">Prüfung ausstehend</span>
+          <span id="dCoMeta"></span>
         </div>
       </div>
-    </div>
-    <div class="chiprow"><span>Eupen</span><span>5–10 Std/Woche</span><span>Nachmittags verfügbar</span></div>
-    <div class="appcard-actions">
-      <button class="btn-outline-danger">Absagen</button>
-      <button class="btn-accept">Annehmen</button>
-    </div>
-  </div>
-
-  <div class="appcard">
-    <div class="appcard-top">
-      <div class="appcard-name">
-        <div class="avatar">JP</div>
-        <div>
-          <h4>Jonas P.</h4>
-          <div class="sub">Bewirbt sich auf: Wochenend-Aushilfe Küche</div>
-        </div>
+      <div class="headright">
+        <button class="btn btn-ghost" id="logoutBtn">Ausloggen</button>
+        <button class="btn btn-primary" id="newJobToggle">+ Neue Anzeige</button>
       </div>
-      <span class="status-pill status-accepted">✓ Angenommen</span>
     </div>
-    <div class="chiprow"><span>Kelmis</span><span>10–20 Std/Woche</span><span>Nur Wochenende</span></div>
-    <div class="appcard-actions">
-      <button class="btn-accept" style="background:var(--ink);">📅 Zum Gespräch einladen</button>
-    </div>
-  </div>
 
-  <div class="appcard">
-    <div class="appcard-top">
-      <div class="appcard-name">
-        <div class="avatar">MD</div>
-        <div>
-          <h4>Marie D. <span class="mini-badge">✓ verifiziert</span></h4>
-          <div class="sub">Bewirbt sich auf: Aushilfe Service</div>
-        </div>
-      </div>
-      <span class="status-pill status-declined">Abgesagt</span>
+    <div class="kpirow">
+      <div class="kpi"><div class="num" id="kpiActive">0</div><div class="lbl">Aktive Anzeigen</div></div>
+      <div class="kpi"><div class="num" id="kpiNew">0</div><div class="lbl">Neue Bewerbungen</div></div>
+      <div class="kpi"><div class="num" id="kpiAccepted">0</div><div class="lbl">Angenommen</div></div>
     </div>
-    <div class="chiprow"><span>Raeren</span><span>5–10 Std/Woche</span><span>Vormittags verfügbar</span></div>
+
+    <div id="newJobCard" class="newjobcard hidden">
+      <div id="newJobMsg"></div>
+      <form id="newJobForm">
+        <div class="field"><label>Titel</label><input type="text" id="jTitle" placeholder="z.B. Aushilfe Service" required></div>
+        <div class="grid2">
+          <div class="field">
+            <label>Kategorie</label>
+            <select id="jCategory">
+              <option value="service">Service & Gastro</option>
+              <option value="logistik">Lager & Logistik</option>
+              <option value="buero">Büro & Admin</option>
+              <option value="nachhilfe">Nachhilfe geben</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Standort</label>
+            <select id="jLocation">
+              <option value="eupen">Eupen</option>
+              <option value="stvith">St. Vith</option>
+              <option value="kelmis">Kelmis</option>
+              <option value="raeren">Raeren</option>
+            </select>
+          </div>
+          <div class="field"><label>Std./Woche</label><input type="text" id="jHours" placeholder="z.B. 8–12" required></div>
+          <div class="field"><label>Lohn/Std. (€)</label><input type="number" step="0.1" id="jWage" required></div>
+          <div class="field">
+            <label>Start</label>
+            <select id="jStart">
+              <option value="now">Sofort</option>
+              <option value="weeks">In 2 Wochen</option>
+              <option value="month">Nächster Monat</option>
+            </select>
+          </div>
+        </div>
+        <button type="submit" class="btn btn-primary">Anzeige veröffentlichen</button>
+      </form>
+    </div>
+
+    <div class="section-title">Eure Anzeigen <span class="sub" id="jobCountSub"></span></div>
+    <div id="jobsList"></div>
+
+    <div class="section-title" style="margin-top:32px;">Bewerbungen <span class="sub">alle Anzeigen</span></div>
+    <div id="applicationsList"></div>
+
   </div>
 
 </div>
 
+<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+<script src="assets/supabase-client.js"></script>
 <script>
-document.querySelectorAll(".btn-accept, .btn-outline-danger").forEach(btn=>{
-  btn.addEventListener("click", ()=>{
-    if(btn.textContent.includes("Gespräch")) return;
-    const card = btn.closest(".appcard");
-    const actions = card.querySelector(".appcard-actions");
-    const top = card.querySelector(".appcard-top");
-    const isAccept = btn.classList.contains("btn-accept");
-    let pill = top.querySelector(".status-pill");
-    if(!pill){
-      pill = document.createElement("span");
-      pill.className = "status-pill";
-      top.appendChild(pill);
-    }
-    if(isAccept){
-      pill.className = "status-pill status-accepted";
-      pill.textContent = "✓ Angenommen";
-      actions.innerHTML = `<button class="btn-accept" style="background:var(--ink);">📅 Zum Gespräch einladen</button>`;
-    } else {
-      pill.className = "status-pill status-declined";
-      pill.textContent = "Abgesagt";
-      actions.remove();
-    }
-  });
+const CATEGORY_LABELS = {service:"Service & Gastro", logistik:"Lager & Logistik", buero:"Büro & Admin", nachhilfe:"Nachhilfe geben"};
+const LOCATION_LABELS = {eupen:"Eupen", stvith:"St. Vith", kelmis:"Kelmis", raeren:"Raeren"};
+const START_LABELS = {now:"Sofort", weeks:"In 2 Wochen", month:"Nächster Monat"};
+
+const loadingView = document.getElementById("loadingView");
+const authView = document.getElementById("authView");
+const completeProfileView = document.getElementById("completeProfileView");
+const dashboardView = document.getElementById("dashboardView");
+
+function showOnly(el){
+  [loadingView, authView, completeProfileView, dashboardView].forEach(v => v.classList.toggle("hidden", v !== el));
+}
+
+function initials(name){
+  return name.trim().split(/\s+/).slice(0,2).map(w=>w[0].toUpperCase()).join("");
+}
+
+function escapeHtml(str){
+  if(str === null || str === undefined) return "";
+  return String(str).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+}
+
+/* ===== Auth tabs ===== */
+document.getElementById("tabLogin").onclick = () => {
+  document.getElementById("tabLogin").classList.add("active");
+  document.getElementById("tabSignup").classList.remove("active");
+  document.getElementById("loginForm").classList.remove("hidden");
+  document.getElementById("signupForm").classList.add("hidden");
+};
+document.getElementById("tabSignup").onclick = () => {
+  document.getElementById("tabSignup").classList.add("active");
+  document.getElementById("tabLogin").classList.remove("active");
+  document.getElementById("signupForm").classList.remove("hidden");
+  document.getElementById("loginForm").classList.add("hidden");
+};
+
+function showAuthMsg(text, ok){
+  document.getElementById("authMsg").innerHTML = `<div class="msg ${ok?'ok':'err'}">${escapeHtml(text)}</div>`;
+}
+
+document.getElementById("loginForm").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const email = document.getElementById("loginEmail").value;
+  const password = document.getElementById("loginPassword").value;
+  const { error } = await sbClient.auth.signInWithPassword({ email, password });
+  if(error){ showAuthMsg(error.message, false); return; }
+  boot();
 });
+
+document.getElementById("signupForm").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const email = document.getElementById("signupEmail").value;
+  const password = document.getElementById("signupPassword").value;
+  const { data, error } = await sbClient.auth.signUp({ email, password });
+  if(error){ showAuthMsg(error.message, false); return; }
+  if(data.session){
+    boot();
+  } else {
+    showAuthMsg("Konto erstellt! Bitte bestätige deine E-Mail über den Link, den wir dir geschickt haben, und logg dich danach ein.", true);
+    document.getElementById("tabLogin").click();
+  }
+});
+
+document.getElementById("logoutBtn").addEventListener("click", async () => {
+  await sbClient.auth.signOut();
+  boot();
+});
+
+/* ===== Complete profile ===== */
+document.getElementById("profileForm").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const { data: { user } } = await sbClient.auth.getUser();
+  const company_name = document.getElementById("profCompanyName").value;
+  const industry = document.getElementById("profIndustry").value;
+  const location = document.getElementById("profLocation").value;
+  const { error } = await sbClient.from("companies").insert({ id: user.id, company_name, industry, location });
+  if(error){
+    document.getElementById("profileMsg").innerHTML = `<div class="msg err">${escapeHtml(error.message)}</div>`;
+    return;
+  }
+  boot();
+});
+
+/* ===== New job form ===== */
+document.getElementById("newJobToggle").addEventListener("click", () => {
+  document.getElementById("newJobCard").classList.toggle("hidden");
+});
+
+document.getElementById("newJobForm").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const { data: { user } } = await sbClient.auth.getUser();
+  const payload = {
+    company_id: user.id,
+    title: document.getElementById("jTitle").value,
+    category: document.getElementById("jCategory").value,
+    location: document.getElementById("jLocation").value,
+    hours_per_week: document.getElementById("jHours").value,
+    wage_per_hour: parseFloat(document.getElementById("jWage").value),
+    start_option: document.getElementById("jStart").value,
+    status: "open"
+  };
+  const { error } = await sbClient.from("jobs").insert(payload);
+  if(error){
+    document.getElementById("newJobMsg").innerHTML = `<div class="msg err">${escapeHtml(error.message)}</div>`;
+    return;
+  }
+  document.getElementById("newJobForm").reset();
+  document.getElementById("newJobCard").classList.add("hidden");
+  loadDashboardData(user.id);
+});
+
+/* ===== Load & render dashboard data ===== */
+async function loadDashboardData(companyId){
+  const [{ data: jobs, error: jobsErr }, { data: apps, error: appsErr }] = await Promise.all([
+    sbClient.from("jobs").select("*").eq("company_id", companyId).order("created_at", { ascending: false }),
+    sbClient.from("applications").select("*, jobs(title, company_id)").order("created_at", { ascending: false })
+  ]);
+
+  const jobList = jobs || [];
+  const appList = (apps || []).filter(a => a.jobs && a.jobs.company_id === companyId);
+
+  document.getElementById("kpiActive").textContent = jobList.filter(j => j.status === "open").length;
+  document.getElementById("kpiNew").textContent = appList.filter(a => a.status === "pending").length;
+  document.getElementById("kpiAccepted").textContent = appList.filter(a => a.status === "accepted").length;
+  document.getElementById("jobCountSub").textContent = jobList.filter(j => j.status === "open").length + " aktiv";
+
+  const jobsListEl = document.getElementById("jobsList");
+  jobsListEl.innerHTML = "";
+  if(jobList.length === 0){
+    jobsListEl.innerHTML = `<div class="empty-note">Noch keine Anzeigen — leg oben deine erste an.</div>`;
+  } else {
+    jobList.forEach(j => {
+      const row = document.createElement("div");
+      row.className = "jobrow";
+      row.innerHTML = `
+        <div><div class="jt">${escapeHtml(j.title)}</div><div class="jm">${escapeHtml(j.hours_per_week) || "–"} Std/Woche · ${j.wage_per_hour ?? "–"} €/Std · ${LOCATION_LABELS[j.location] || escapeHtml(j.location) || ""}</div></div>
+        <span class="jstat">${j.status === "open" ? "● Online" : "Geschlossen"}</span>
+      `;
+      jobsListEl.appendChild(row);
+    });
+  }
+
+  const appsListEl = document.getElementById("applicationsList");
+  appsListEl.innerHTML = "";
+  if(appList.length === 0){
+    appsListEl.innerHTML = `<div class="empty-note">Noch keine Bewerbungen eingegangen.</div>`;
+  } else {
+    appList.forEach(a => {
+      const card = document.createElement("div");
+      card.className = "appcard";
+      let statusPill = "";
+      let actions = `
+        <button class="btn-outline-danger" data-action="decline" data-id="${a.id}">Absagen</button>
+        <button class="btn-accept" data-action="accept" data-id="${a.id}">Annehmen</button>
+      `;
+      if(a.status === "accepted"){
+        statusPill = `<span class="status-pill status-accepted">✓ Angenommen</span>`;
+        actions = "";
+      } else if(a.status === "declined"){
+        statusPill = `<span class="status-pill status-declined">Abgesagt</span>`;
+        actions = "";
+      }
+      card.innerHTML = `
+        <div class="appcard-top">
+          <div class="appcard-name">
+            <div class="avatar">${escapeHtml(initials(a.applicant_name))}</div>
+            <div>
+              <h4>${escapeHtml(a.applicant_name)}</h4>
+              <div class="sub">Bewirbt sich auf: ${escapeHtml(a.jobs ? a.jobs.title : "—")} · ${escapeHtml(a.applicant_email)}</div>
+            </div>
+          </div>
+          ${statusPill}
+        </div>
+        <div class="chiprow">
+          ${a.location ? `<span>${LOCATION_LABELS[a.location] || escapeHtml(a.location)}</span>` : ""}
+          ${a.hours_pref ? `<span>${escapeHtml(a.hours_pref)}</span>` : ""}
+          ${a.start_pref ? `<span>${START_LABELS[a.start_pref] || escapeHtml(a.start_pref)}</span>` : ""}
+        </div>
+        ${actions ? `<div class="appcard-actions">${actions}</div>` : ""}
+      `;
+      appsListEl.appendChild(card);
+    });
+
+    appsListEl.querySelectorAll("[data-action]").forEach(btn => {
+      btn.addEventListener("click", async () => {
+        const id = btn.dataset.id;
+        const status = btn.dataset.action === "accept" ? "accepted" : "declined";
+        await sbClient.from("applications").update({ status }).eq("id", id);
+        loadDashboardData(companyId);
+      });
+    });
+  }
+}
+
+/* ===== Boot / router ===== */
+async function boot(){
+  showOnly(loadingView);
+  const { data: { session } } = await sbClient.auth.getSession();
+  if(!session){ showOnly(authView); return; }
+
+  const { data: company, error } = await sbClient.from("companies").select("*").eq("id", session.user.id).maybeSingle();
+  if(!company){ showOnly(completeProfileView); return; }
+
+  document.getElementById("dCompanyName").textContent = company.company_name;
+  document.getElementById("dCoMeta").textContent = [company.industry, LOCATION_LABELS[company.location] || company.location].filter(Boolean).join(" · ");
+  const badge = document.getElementById("dVerifiedBadge");
+  if(company.verified){
+    badge.className = "verified-badge";
+    badge.textContent = "✓ Verifiziert";
+  } else {
+    badge.className = "unverified-badge";
+    badge.textContent = "Prüfung ausstehend";
+  }
+
+  showOnly(dashboardView);
+  loadDashboardData(session.user.id);
+}
+
+boot();
 </script>
 </body>
 </html>

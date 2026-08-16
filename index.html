@@ -174,6 +174,19 @@
   }
   .mc-apply:active{transform:scale(.98);}
   .mc-apply.sent{background:var(--forest);}
+  .mc-apply:disabled{opacity:.7; cursor:default;}
+  .chat-input-row{display:flex; gap:8px; padding:2px 16px 16px;}
+  .chat-text-input{
+    flex:1; padding:10px 14px; border:1.5px solid var(--line); border-radius:999px; font-size:14px;
+    font-family:'Inter',sans-serif; background:white;
+  }
+  .chat-text-input:focus{outline:none; border-color:var(--forest);}
+  .chat-send-btn{
+    width:38px; height:38px; border-radius:50%; border:none; background:var(--forest); color:white;
+    font-size:16px; flex-shrink:0;
+  }
+  .match-msg{font-size:12px; margin-top:8px; color:var(--forest-dark);}
+  .match-msg.err{color:#D64545;}
 
   .demo-side h3{font-size:22px; font-weight:800; margin-bottom:14px;}
   .demo-steps{list-style:none; display:flex; flex-direction:column; gap:16px;}
@@ -341,8 +354,7 @@
           <li data-i18n="tl2">✓ Anzeige online in unter 2 Minuten</li>
           <li data-i18n="tl3">✓ Bewerbungen direkt im Dashboard annehmen oder absagen</li>
         </ul>
-        <a class="btn btn-primary" href="dashboard-preview.html" target="_blank" rel="noopener" data-i18n="compCta">Dashboard-Vorschau ansehen →</a>
-        <div class="teaser-note" data-i18n="compNote">Vorschau eines künftigen Features — im Prototyp noch nicht mit dem Chat verbunden.</div>
+        <a class="btn btn-primary" href="dashboard.html" target="_blank" rel="noopener" data-i18n="compCta">Zum Unternehmens-Dashboard →</a>
       </div>
       <div class="company-teaser-visual">
         <div class="mini-dash">
@@ -363,6 +375,8 @@
   </div>
 </footer>
 
+<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+<script src="assets/supabase-client.js"></script>
 <script>
 /* ================= i18n ================= */
 const i18n = {
@@ -404,12 +418,11 @@ const i18n = {
       {bot:"Wie viel Zeit hast du pro Woche?", chips:["Unter 5 Std","5–10 Std","10–20 Std","Nur Wochenende"]},
       {bot:"Ab wann kannst du starten?", chips:["Sofort","In 2 Wochen","Nächster Monat"]}
     ],
-    matchIntro:"Match gefunden! 🎉 Zwei Betriebe passen zu dir:",
-    matches:[
-      {role:"Aushilfe Service", company:"Café Belvedere · Eupen", meta:"8–12 Std/Woche · 12,50 €"},
-      {role:"Lagerhilfe", company:"Bau Meyer & Söhne · Raeren", meta:"10 Std/Woche · 13,00 €"}
-    ],
-    apply:"1-Klick bewerben", applied:"✓ Bewerbung gesendet"
+    askName:"Fast fertig! Wie heißt du?", namePlaceholder:"Dein Name",
+    askEmail:"Und deine E-Mail, damit der Betrieb dich erreicht?", emailPlaceholder:"deine@email.com",
+    matchIntro:"Match gefunden! 🎉 Diese Betriebe passen zu dir:",
+    noMatches:"Gerade keine offene Stelle in deiner Kategorie — aber schau später nochmal vorbei!",
+    apply:"1-Klick bewerben", applied:"✓ Bewerbung gesendet", applyError:"Ging leider nicht — versuch's nochmal."
   },
   fr: {
     eyebrow:"UNIQUEMENT POUR LA BELGIQUE DE L'EST · DE · FR · NL",
@@ -449,12 +462,11 @@ const i18n = {
       {bot:"Combien de temps as-tu par semaine ?", chips:["Moins de 5h","5–10h","10–20h","Week-end seulement"]},
       {bot:"Tu peux commencer quand ?", chips:["Immédiatement","Dans 2 semaines","Le mois prochain"]}
     ],
-    matchIntro:"Match trouvé ! 🎉 Deux entreprises te correspondent :",
-    matches:[
-      {role:"Aide en salle", company:"Café Belvedere · Eupen", meta:"8–12h/semaine · 12,50 €"},
-      {role:"Aide entrepôt", company:"Bau Meyer & Söhne · Raeren", meta:"10h/semaine · 13,00 €"}
-    ],
-    apply:"Postuler en 1 clic", applied:"✓ Candidature envoyée"
+    askName:"Presque fini ! Comment tu t'appelles ?", namePlaceholder:"Ton nom",
+    askEmail:"Et ton e-mail, pour que l'entreprise te contacte ?", emailPlaceholder:"ton@email.com",
+    matchIntro:"Match trouvé ! 🎉 Ces entreprises te correspondent :",
+    noMatches:"Pas d'offre ouverte dans ta catégorie pour l'instant — reviens bientôt !",
+    apply:"Postuler en 1 clic", applied:"✓ Candidature envoyée", applyError:"Ça n'a pas marché — réessaie."
   },
   nl: {
     eyebrow:"ALLEEN VOOR OOST-BELGIË · DE · FR · NL",
@@ -494,12 +506,11 @@ const i18n = {
       {bot:"Hoeveel tijd heb je per week?", chips:["Minder dan 5u","5–10u","10–20u","Enkel weekend"]},
       {bot:"Wanneer kan je starten?", chips:["Onmiddellijk","Over 2 weken","Volgende maand"]}
     ],
-    matchIntro:"Match gevonden! 🎉 Twee bedrijven passen bij jou:",
-    matches:[
-      {role:"Hulp bediening", company:"Café Belvedere · Eupen", meta:"8–12u/week · 12,50 €"},
-      {role:"Magazijnhulp", company:"Bau Meyer & Söhne · Raeren", meta:"10u/week · 13,00 €"}
-    ],
-    apply:"Solliciteer in 1 klik", applied:"✓ Sollicitatie verzonden"
+    askName:"Bijna klaar! Hoe heet je?", namePlaceholder:"Jouw naam",
+    askEmail:"En je e-mail, zodat het bedrijf je kan bereiken?", emailPlaceholder:"jouw@email.com",
+    matchIntro:"Match gevonden! 🎉 Deze bedrijven passen bij jou:",
+    noMatches:"Nu even geen vacature in jouw categorie — kom later terug!",
+    apply:"Solliciteer in 1 klik", applied:"✓ Sollicitatie verzonden", applyError:"Lukte niet — probeer opnieuw."
   }
 };
 
@@ -551,14 +562,14 @@ function addBubble(text, who){
 function addChips(options, onPick){
   const wrap = document.createElement("div");
   wrap.className = "chips";
-  options.forEach(opt=>{
+  options.forEach((opt, idx)=>{
     const c = document.createElement("button");
     c.className = "chip";
     c.textContent = opt;
     c.onclick = ()=>{
       wrap.remove();
       addBubble(opt, "user");
-      onPick(opt);
+      onPick(opt, idx);
     };
     wrap.appendChild(c);
   });
@@ -566,9 +577,48 @@ function addChips(options, onPick){
   chatBody.scrollTop = chatBody.scrollHeight;
 }
 
+function addTextInput(placeholder, onSubmit){
+  const wrap = document.createElement("div");
+  wrap.className = "chat-input-row";
+  wrap.innerHTML = `<input type="text" class="chat-text-input" placeholder="${placeholder}"><button class="chat-send-btn">→</button>`;
+  chatBody.appendChild(wrap);
+  chatBody.scrollTop = chatBody.scrollHeight;
+  const input = wrap.querySelector("input");
+  const btn = wrap.querySelector("button");
+  input.focus();
+  function submit(){
+    const val = input.value.trim();
+    if(!val) return;
+    wrap.remove();
+    addBubble(val, "user");
+    onSubmit(val);
+  }
+  btn.onclick = submit;
+  input.addEventListener("keydown", e=>{ if(e.key==="Enter") submit(); });
+}
+
+/* stable, language-independent keys — chip order matches these arrays in every language */
+const CATEGORY_KEYS = ["service","logistik","buero","nachhilfe"];
+const LOCATION_KEYS = ["eupen","stvith","kelmis","raeren"];
+const START_KEYS = ["now","weeks","month"];
+
+let session = {};
+
+function resetSession(){
+  session = { category:null, location:null, hoursLabel:null, startKey:null, name:null, email:null };
+}
+
+function recordAnswer(stepIdx, opt, idx){
+  if(stepIdx === 0) session.category = CATEGORY_KEYS[idx];
+  if(stepIdx === 1) session.location = LOCATION_KEYS[idx];
+  if(stepIdx === 2) session.hoursLabel = opt;
+  if(stepIdx === 3) session.startKey = START_KEYS[idx];
+}
+
 function resetChat(){
   chatBody.innerHTML = "";
   chatStep = 0;
+  resetSession();
   stopStopwatch();
   document.getElementById("heroTimer").textContent = "0:00";
   document.getElementById("phoneTimer").textContent = "0:00";
@@ -582,34 +632,101 @@ function runStep(){
 
   if(chatStep < t.chat.length){
     const step = t.chat[chatStep];
+    const stepIdx = chatStep;
     addBubble(step.bot, "bot");
-    addChips(step.chips, ()=>{
+    addChips(step.chips, (opt, idx)=>{
+      recordAnswer(stepIdx, opt, idx);
       chatStep++;
       setTimeout(runStep, 500);
     });
+  } else if(!session.name){
+    addBubble(t.askName, "bot");
+    setTimeout(()=> addTextInput(t.namePlaceholder, (val)=>{ session.name = val; setTimeout(runStep, 400); }), 300);
+  } else if(!session.email){
+    addBubble(t.askEmail, "bot");
+    setTimeout(()=> addTextInput(t.emailPlaceholder, (val)=>{ session.email = val; setTimeout(runStep, 400); }), 300);
   } else {
     stopStopwatch();
-    addBubble(t.matchIntro, "bot");
-    t.matches.forEach(m=>{
-      const card = document.createElement("div");
-      card.className = "matchcard";
-      card.innerHTML = `
-        <div class="mc-top">
-          <div><h4>${m.role}</h4><div class="mc-meta">${m.company}</div></div>
-          <div class="mc-badge">${m.meta}</div>
-        </div>
-        <button class="mc-apply">${t.apply}</button>
-      `;
-      const btn = card.querySelector(".mc-apply");
-      btn.onclick = ()=>{
-        btn.textContent = t.applied;
-        btn.classList.add("sent");
-        btn.disabled = true;
-      };
-      chatBody.appendChild(card);
-    });
-    chatBody.scrollTop = chatBody.scrollHeight;
+    showMatches();
   }
+}
+
+async function showMatches(){
+  const t = i18n[currentLang];
+  addBubble("…", "bot");
+  const thinking = chatBody.lastChild;
+
+  let { data: jobs } = await sbClient
+    .from("jobs")
+    .select("*, companies(company_name, verified)")
+    .eq("status", "open")
+    .or(`category.eq.${session.category},location.eq.${session.location}`)
+    .order("created_at", { ascending: false })
+    .limit(3);
+
+  if(!jobs || jobs.length === 0){
+    const fallback = await sbClient
+      .from("jobs")
+      .select("*, companies(company_name, verified)")
+      .eq("status", "open")
+      .order("created_at", { ascending: false })
+      .limit(3);
+    jobs = fallback.data;
+  }
+
+  thinking.remove();
+
+  if(!jobs || jobs.length === 0){
+    addBubble(t.noMatches, "bot");
+    return;
+  }
+
+  addBubble(t.matchIntro, "bot");
+  jobs.forEach(job=>{
+    const companyName = job.companies ? job.companies.company_name : "";
+    const loc = LOCATION_LABELS[job.location] || job.location || "";
+    const card = document.createElement("div");
+    card.className = "matchcard";
+    card.innerHTML = `
+      <div class="mc-top">
+        <div><h4>${escapeHtml(job.title)}</h4><div class="mc-meta">${escapeHtml(companyName)} · ${loc}</div></div>
+        <div class="mc-badge">${escapeHtml(job.hours_per_week) || "–"} Std · ${job.wage_per_hour ?? "–"} €</div>
+      </div>
+      <button class="mc-apply">${t.apply}</button>
+      <div class="match-msg"></div>
+    `;
+    const btn = card.querySelector(".mc-apply");
+    const msgEl = card.querySelector(".match-msg");
+    btn.onclick = async ()=>{
+      btn.disabled = true;
+      const { error } = await sbClient.from("applications").insert({
+        job_id: job.id,
+        applicant_name: session.name,
+        applicant_email: session.email,
+        location: session.location,
+        hours_pref: session.hoursLabel,
+        start_pref: session.startKey
+      });
+      if(error){
+        msgEl.textContent = t.applyError;
+        msgEl.classList.add("err");
+        btn.disabled = false;
+        return;
+      }
+      btn.textContent = t.applied;
+      btn.classList.add("sent");
+    };
+    chatBody.appendChild(card);
+  });
+  chatBody.scrollTop = chatBody.scrollHeight;
+}
+
+/* language-independent labels for rendering job results */
+const LOCATION_LABELS = {eupen:"Eupen", stvith:"St. Vith", kelmis:"Kelmis", raeren:"Raeren"};
+
+function escapeHtml(str){
+  if(str === null || str === undefined) return "";
+  return String(str).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 }
 
 /* init */
