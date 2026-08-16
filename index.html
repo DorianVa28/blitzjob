@@ -85,6 +85,11 @@
     margin-top:22px; font-size:18px; color:var(--ink-soft); max-width:560px;
   }
   .hero-ctas{display:flex; gap:12px; margin-top:32px; flex-wrap:wrap;}
+  .free-badge{
+    display:inline-flex; align-items:center; gap:7px; margin-top:18px;
+    font-family:'IBM Plex Mono',monospace; font-size:12.5px; font-weight:600; color:var(--forest-dark);
+    background:#E7F0E4; border:1px solid #CFE3C8; padding:7px 14px; border-radius:999px;
+  }
   .btn{
     font-family:'Unbounded',sans-serif; font-weight:600; font-size:14.5px;
     padding:15px 26px; border-radius:999px; border:none; cursor:pointer;
@@ -214,6 +219,20 @@
   .compare-col.them li:before{content:"–"; color:#B7C3AC; font-weight:700;}
   .compare-col.us li:before{content:"⚡"; }
 
+  /* ===== mission ===== */
+  .mission{background:var(--forest); color:white;}
+  .mission-shell{display:grid; grid-template-columns:1fr 1fr; gap:44px;}
+  @media(max-width:760px){ .mission-shell{grid-template-columns:1fr;} }
+  .mission .section-head{margin-bottom:0;}
+  .mission .kicker{color:var(--amber);}
+  .mission .section-head p{color:rgba(255,255,255,.82);}
+  .mission-card{
+    background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.16); border-radius:var(--radius);
+    padding:24px;
+  }
+  .mission-card h4{font-size:15px; margin-bottom:8px; display:flex; align-items:center; gap:8px;}
+  .mission-card p{font-size:14px; color:rgba(255,255,255,.82);}
+
   /* ===== company teaser (minimal) ===== */
   .company-teaser{
     display:grid; grid-template-columns:1.1fr .9fr; gap:52px; align-items:center;
@@ -272,6 +291,7 @@
       <button class="btn btn-primary" onclick="document.getElementById('demo').scrollIntoView()"><span data-i18n="ctaStudent">🎓 Ich bin Student:in</span></button>
       <button class="btn btn-ghost" onclick="document.getElementById('company').scrollIntoView()"><span data-i18n="ctaCompany">🏢 Ich bin Unternehmen</span></button>
     </div>
+    <div class="free-badge">💚 <span data-i18n="freeBadge">100% kostenlos — für Studenten & Unternehmen</span></div>
 
     <div class="stopwatch-strip">
       <div class="sw-time mono" id="heroTimer">0:00</div>
@@ -342,6 +362,26 @@
   </div>
 </section>
 
+<section class="mission">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="kicker" data-i18n="missionKicker">Warum es Blitzjob gibt</span>
+      <h2 data-i18n="missionTitle">Zwei Seiten, ein Ziel: schneller zueinanderfinden.</h2>
+      <p data-i18n="missionSub">Blitzjob existiert aus einem einfachen Grund — die Suche nach einem Studentenjob und die Suche nach motivierten Studenten dauert in Ostbelgien meist viel zu lange und läuft über die falschen Kanäle.</p>
+    </div>
+    <div class="mission-shell" style="margin-top:36px;">
+      <div class="mission-card">
+        <h4>🎓 <span data-i18n="missionStudentTitle">Für Studenten</span></h4>
+        <p data-i18n="missionStudentText">Schnell und unkompliziert einen passenden Nebenjob in der Nähe finden — um sich weiterzuentwickeln, erste Erfahrung zu sammeln und eigenes Geld zu verdienen. Ohne stundenlanges Anschreiben-Schreiben.</p>
+      </div>
+      <div class="mission-card">
+        <h4>🏢 <span data-i18n="missionCompanyTitle">Für Unternehmen</span></h4>
+        <p data-i18n="missionCompanyText">Schnell motivierte Studenten aus der Region finden, ohne sich in landesweiten Portalen zu verlieren — mit wenig Aufwand die richtigen Leute für kurzfristigen oder wiederkehrenden Bedarf erreichen.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
 <section id="company">
   <div class="wrap">
     <div class="company-teaser">
@@ -353,6 +393,7 @@
           <li data-i18n="tl1">✓ Einmal verifiziert, dauerhaft freigeschaltet</li>
           <li data-i18n="tl2">✓ Anzeige online in unter 2 Minuten</li>
           <li data-i18n="tl3">✓ Bewerbungen direkt im Dashboard annehmen oder absagen</li>
+          <li data-i18n="tl4">✓ 100% kostenlos, keine versteckten Gebühren</li>
         </ul>
         <a class="btn btn-primary" href="dashboard.html" target="_blank" rel="noopener" data-i18n="compCta">Zum Unternehmens-Dashboard →</a>
       </div>
@@ -406,7 +447,12 @@ const i18n = {
     us4:"100&nbsp;% auf Studentenjobs zugeschnitten",
     compKicker:"Für Unternehmen", compTitle:"Ein Konto. Eine Anzeige. Alle Bewerbungen an einem Ort.",
     compSub:"Registrierung mit kurzer, manueller Prüfung — danach verwaltet ihr Anzeigen und Bewerbungen in einem einzigen, einfachen Dashboard. Kein Schnickschnack, keine fünf Klicks für eine Anzeige.",
-    tl1:"✓ Einmal verifiziert, dauerhaft freigeschaltet", tl2:"✓ Anzeige online in unter 2 Minuten", tl3:"✓ Bewerbungen direkt im Dashboard annehmen oder absagen",
+    freeBadge:"100% kostenlos — für Studenten & Unternehmen",
+    missionKicker:"Warum es Blitzjob gibt", missionTitle:"Zwei Seiten, ein Ziel: schneller zueinanderfinden.",
+    missionSub:"Blitzjob existiert aus einem einfachen Grund — die Suche nach einem Studentenjob und die Suche nach motivierten Studenten dauert in Ostbelgien meist viel zu lange und läuft über die falschen Kanäle.",
+    missionStudentTitle:"Für Studenten", missionStudentText:"Schnell und unkompliziert einen passenden Nebenjob in der Nähe finden — um sich weiterzuentwickeln, erste Erfahrung zu sammeln und eigenes Geld zu verdienen. Ohne stundenlanges Anschreiben-Schreiben.",
+    missionCompanyTitle:"Für Unternehmen", missionCompanyText:"Schnell motivierte Studenten aus der Region finden, ohne sich in landesweiten Portalen zu verlieren — mit wenig Aufwand die richtigen Leute für kurzfristigen oder wiederkehrenden Bedarf erreichen.",
+    tl1:"✓ Einmal verifiziert, dauerhaft freigeschaltet", tl2:"✓ Anzeige online in unter 2 Minuten", tl3:"✓ Bewerbungen direkt im Dashboard annehmen oder absagen", tl4:"✓ 100% kostenlos, keine versteckten Gebühren",
     compCta:"Dashboard-Vorschau ansehen →", compNote:"Vorschau eines künftigen Features — im Prototyp noch nicht mit dem Chat verbunden.",
     lblRole:"GESUCHTE ROLLE", lblCompany:"BETRIEB & ORT", lblHours:"STD./WOCHE", lblWage:"LOHN/STD.", lblStart:"START",
     optNow:"Sofort", optWeeks:"In 2 Wochen", optMonth:"Nächster Monat",
@@ -450,7 +496,12 @@ const i18n = {
     us4:"100&nbsp;% dédié aux jobs étudiants",
     compKicker:"Pour les entreprises", compTitle:"Un compte. Une annonce. Toutes les candidatures au même endroit.",
     compSub:"Inscription avec une courte vérification manuelle — ensuite, gérez annonces et candidatures dans un seul tableau de bord simple. Pas de fioritures, pas cinq clics pour une annonce.",
-    tl1:"✓ Vérifié une fois, activé durablement", tl2:"✓ Annonce en ligne en moins de 2 minutes", tl3:"✓ Accepter ou refuser les candidatures directement dans le tableau de bord",
+    freeBadge:"100% gratuit — pour étudiant(e)s & entreprises",
+    missionKicker:"Pourquoi Blitzjob existe", missionTitle:"Deux camps, un seul but : se trouver plus vite.",
+    missionSub:"Blitzjob existe pour une raison simple — trouver un job étudiant, comme trouver des étudiants motivés, prend en Belgique de l'Est bien trop de temps et passe par les mauvais canaux.",
+    missionStudentTitle:"Pour les étudiant(e)s", missionStudentText:"Trouver rapidement et simplement un petit job adapté près de chez soi — pour progresser, acquérir une première expérience et gagner son propre argent. Sans passer des heures à rédiger une lettre de motivation.",
+    missionCompanyTitle:"Pour les entreprises", missionCompanyText:"Trouver rapidement des étudiant(e)s motivé(e)s de la région, sans se perdre dans des portails nationaux — atteindre les bonnes personnes avec peu d'effort, pour un besoin ponctuel ou récurrent.",
+    tl1:"✓ Vérifié une fois, activé durablement", tl2:"✓ Annonce en ligne en moins de 2 minutes", tl3:"✓ Accepter ou refuser les candidatures directement dans le tableau de bord", tl4:"✓ 100% gratuit, sans frais cachés",
     compCta:"Voir l'aperçu du tableau de bord →", compNote:"Aperçu d'une fonctionnalité future — pas encore relié au chat dans ce prototype.",
     lblRole:"POSTE RECHERCHÉ", lblCompany:"ENTREPRISE & LIEU", lblHours:"H./SEMAINE", lblWage:"SALAIRE/H", lblStart:"DÉBUT",
     optNow:"Immédiatement", optWeeks:"Dans 2 semaines", optMonth:"Le mois prochain",
@@ -494,7 +545,12 @@ const i18n = {
     us4:"100&nbsp;% toegespitst op studentenjobs",
     compKicker:"Voor bedrijven", compTitle:"Eén account. Eén advertentie. Alle sollicitaties op één plek.",
     compSub:"Registratie met korte, manuele controle — daarna beheer je advertenties en sollicitaties in één eenvoudig dashboard. Geen poespas, geen vijf klikken voor één advertentie.",
-    tl1:"✓ Eenmalig geverifieerd, blijvend vrijgeschakeld", tl2:"✓ Advertentie online in minder dan 2 minuten", tl3:"✓ Sollicitaties rechtstreeks in het dashboard aanvaarden of afwijzen",
+    freeBadge:"100% gratis — voor studenten & bedrijven",
+    missionKicker:"Waarom Blitzjob bestaat", missionTitle:"Twee kanten, één doel: elkaar sneller vinden.",
+    missionSub:"Blitzjob bestaat om een eenvoudige reden — het zoeken naar een studentenjob, en het zoeken naar gemotiveerde studenten, duurt in Oost-België meestal veel te lang en verloopt via de verkeerde kanalen.",
+    missionStudentTitle:"Voor studenten", missionStudentText:"Snel en eenvoudig een passende bijbaan in de buurt vinden — om jezelf verder te ontwikkelen, eerste ervaring op te doen en eigen geld te verdienen. Zonder urenlang aan een motivatiebrief te schrijven.",
+    missionCompanyTitle:"Voor bedrijven", missionCompanyText:"Snel gemotiveerde studenten uit de regio vinden, zonder te verdwalen in landelijke portalen — met weinig moeite de juiste mensen bereiken voor kortdurende of terugkerende behoeften.",
+    tl1:"✓ Eenmalig geverifieerd, blijvend vrijgeschakeld", tl2:"✓ Advertentie online in minder dan 2 minuten", tl3:"✓ Sollicitaties rechtstreeks in het dashboard aanvaarden of afwijzen", tl4:"✓ 100% gratis, geen verborgen kosten",
     compCta:"Bekijk dashboard-voorbeeld →", compNote:"Voorbeeld van een toekomstige functie — in dit prototype nog niet gekoppeld aan de chat.",
     lblRole:"GEZOCHTE FUNCTIE", lblCompany:"BEDRIJF & PLAATS", lblHours:"U./WEEK", lblWage:"LOON/U", lblStart:"START",
     optNow:"Onmiddellijk", optWeeks:"Over 2 weken", optMonth:"Volgende maand",

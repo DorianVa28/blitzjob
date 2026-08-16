@@ -2,6 +2,23 @@
 
 Job-Matching-Prototyp für Studentenjobs in Ostbelgien (DE/FR/NL). Statisches Frontend (`index.html`, `dashboard.html`) auf GitHub Pages, Backend über [Supabase](https://supabase.com) (Postgres + Auth + Auto-API).
 
+## Warum es Blitzjob gibt
+
+Blitzjob verfolgt zwei Ziele gleichzeitig:
+
+- **Für Unternehmen:** schnell motivierte Studenten aus der Region finden, ohne sich in landesweiten Jobportalen zu verlieren.
+- **Für Studenten:** schnell und unkompliziert einen passenden Nebenjob in der Nähe finden — um sich weiterzuentwickeln, erste Erfahrung zu sammeln und eigenes Geld zu verdienen, ohne stundenlange Bewerbungen schreiben zu müssen.
+
+Die Seite ist für Unternehmen und Studenten **100% kostenlos**.
+
+## Sprachen (DE / FR / NL)
+
+Die Zielgruppe in Ostbelgien ist dreisprachig — **jeder sichtbare Text auf `index.html` muss deshalb in allen drei Sprachen vorliegen**, nicht nur Deutsch. Konkret heißt das:
+
+- Jeder neue/geänderte Text bekommt ein `data-i18n="key"`-Attribut im HTML und einen passenden Fallback-Text als Inhalt (wird angezeigt, falls ein Key mal fehlt).
+- Der gleiche `key` muss in **allen drei** Objekten `i18n.de`, `i18n.fr`, `i18n.nl` im `<script>`-Block von `index.html` gepflegt werden — fehlt ein Key in einer Sprache, bleibt beim Umschalten der vorherige (falsche) Sprachtext stehen.
+- `dashboard.html` ist aktuell bewusst nur auf Deutsch (interne Nutzung durch Unternehmen) — falls das sich ändern soll, gerne ansprechen.
+
 ## Setup
 
 1. Supabase-Projekt anlegen, `supabase/schema.sql` im SQL-Editor ausführen

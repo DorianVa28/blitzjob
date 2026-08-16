@@ -1,0 +1,44 @@
+<!--
+  Blitzjob — E-Mail-Vorlage "Confirm signup"
+  Einfügen unter: Supabase Dashboard → Authentication → Email Templates → "Confirm signup"
+  Verfügbare Variablen: {{ .ConfirmationURL }} {{ .Email }} {{ .SiteURL }}
+-->
+<div style="background-color:#F5F7F0; padding:40px 20px; font-family:'Helvetica Neue',Arial,sans-serif;">
+  <table role="presentation" width="100%" style="max-width:480px; margin:0 auto; background:#FFFFFF; border-radius:18px; overflow:hidden; border:1px solid #DEE6D6;">
+    <tr>
+      <td style="background:#2D6A4F; padding:28px 32px; text-align:left;">
+        <span style="display:inline-flex; align-items:center; gap:8px; color:#FFFFFF; font-size:18px; font-weight:800;">
+          <span style="background:#FF5A36; width:26px; height:26px; border-radius:8px; display:inline-block; text-align:center; line-height:26px; color:#fff;">⚡</span>
+          Blitzjob
+        </span>
+      </td>
+    </tr>
+    <tr>
+      <td style="padding:36px 32px 8px;">
+        <h1 style="margin:0 0 14px; font-size:22px; color:#14261C;">Willkommen bei Blitzjob! 👋</h1>
+        <p style="margin:0 0 16px; font-size:15px; line-height:1.6; color:#4B5B50;">
+          Schön, dass ihr dabei seid. Bestätigt kurz eure E-Mail-Adresse, dann könnt ihr euch einloggen, euer Firmenprofil anlegen und eure erste Anzeige für Studentenjobs in Ostbelgien veröffentlichen.
+        </p>
+      </td>
+    </tr>
+    <tr>
+      <td style="padding:8px 32px 32px;">
+        <a href="{{ .ConfirmationURL }}"
+           style="display:inline-block; background:#FF5A36; color:#FFFFFF; text-decoration:none; font-weight:700; font-size:14.5px; padding:14px 28px; border-radius:999px;">
+          E-Mail-Adresse bestätigen →
+        </a>
+        <p style="margin:20px 0 0; font-size:12.5px; color:#4B5B50;">
+          Funktioniert der Button nicht? Link kopieren:<br>
+          <a href="{{ .ConfirmationURL }}" style="color:#2D6A4F; word-break:break-all;">{{ .ConfirmationURL }}</a>
+        </p>
+      </td>
+    </tr>
+    <tr>
+      <td style="padding:20px 32px 28px; border-top:1px solid #F0F3EC;">
+        <p style="margin:0; font-size:12px; color:#9AA79C;">
+          Diese Mail ging an {{ .Email }}, weil ihr euch bei Blitzjob als Unternehmen registriert habt. Wenn ihr das nicht wart, könnt ihr die Mail einfach ignorieren.
+        </p>
+      </td>
+    </tr>
+  </table>
+</div>
